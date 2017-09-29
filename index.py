@@ -82,7 +82,7 @@ class PhotoCreator(webapp2.RequestHandler):
         photo = Photo(parent=stream_key(stream_name))
         photo_data = self.request.get('photo_data')
         photo.data = photo_data
-        photo.put()
+        photo.put()#TODO: the photo size could be too large
         query_params = {'stream_name': stream_name}
         self.redirect('/StreamView?' + urllib.urlencode(query_params))
 
