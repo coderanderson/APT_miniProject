@@ -12,7 +12,7 @@ handlers:
   static_dir: static_files
 
 - url: /.*
-  script: index.app
+  script: app.app
 # [END handlers]
 
 # [START libraries]

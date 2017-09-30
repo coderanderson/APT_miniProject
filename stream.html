@@ -5,8 +5,11 @@
     <body>
         <h1>{{ stream_name }}</h1>
         <br/>
+        <img src="/stream_cover?cover_id={{ cover_url }}"></img>
+        <br/>
+        <h1> {{ cover_url }} </h1>
         {% for url in photo_urls %}
-            <img src="/img?img_id={{ url }}"></img>
+            <img src="/photo_img?img_id={{ url }}"></img>
         {% endfor %}
     </body>
 </html>
