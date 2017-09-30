@@ -12,7 +12,7 @@ import jinja2
 import webapp2
 
 JINJA_ENVIRONMENT = jinja2.Environment(
-    loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
+    loader=jinja2.FileSystemLoader([os.path.dirname(__file__), '/static_files/views']),
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)
 # [END imports]
