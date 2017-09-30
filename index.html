@@ -1,0 +1,61 @@
+<html>
+    <head>
+      <title>Create Stream</title>
+      <!-- <link type="text/css" rel="stylesheet" href="../css/bootstrap.css">
+      <link type="text/css" rel="stylesheet" href="../css/bootstrap-responsive.css"> -->
+      <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+      <link rel="stylesheet" href="/static_files/css/index.css">
+    </head>
+    <body>
+        
+        <!-- <form action="/CreateStream" method="post">
+            <input type="text" name="stream_name" placeholder="Stream Name">
+            <input type="submit" value="Create">
+        </form> -->
+        <div class="container">
+          {% include 'header.html' %}
+          <div class="row">
+            <form action="/CreateStream" method="post">
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="nameOfStream">Name your stream</label>
+                    <input type="text" 
+                           class="form-control" 
+                           placeholder="Enter your new stream name"
+                           name="stream_name"
+                    >
+                  </div>
+                  <div class="form-group">
+                    <label for="subscribers">Add Subscribers</label>
+                    <textarea class="form-control" placeholder="abc@abc.com" rows="5"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <textarea class="form-control" 
+                              placeholder="Optional message for invite" 
+                              rows="3"></textarea>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="tags">Tag your stream</label>
+                    <textarea class="form-control" 
+                              placeholder="#AdnanFriends, #FB, #1985" 
+                              rows="3"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label for="coverImage">URL to cover image</label>
+                    <textarea class="form-control" 
+                              placeholder="http://flickr.com/cat_image.png" 
+                              rows="1"></textarea>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <button type="submit" class="btn btn-primary" value="Create">Create Stream</button>
+              </div>
+            </form>
+          </div>
+        </div>
+    </body>
+</html>
