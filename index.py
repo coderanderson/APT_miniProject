@@ -45,7 +45,7 @@ class MainPage(webapp2.RequestHandler):
 class PhotoUpload(webapp2.RequestHandler):
 
     def get(self):
-        template = JINJA_ENVIRONMENT.get_template('photoUpload.html')
+        template = JINJA_ENVIRONMENT.get_template('stream.html')
         self.response.write(template.render({}))
 # [END main_page]
 
