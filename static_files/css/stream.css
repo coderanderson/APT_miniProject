@@ -1,17 +1,17 @@
 img {
-	height: 150px;
-	width: 200px;
+  height: 150px;
+  width: 200px;
 }
 
 #fileUpload {
-	border: solid 2px grey;
-	padding: 35px;
+  border: solid 2px grey;
+  padding: 35px;
 }
 
 #uploadRow {
-	margin-top: 35px;
-	margin-bottom: 35px;
-
+  margin-top: 35px;
+  margin-bottom: 35px;
+}
 
 .btn-file {
     position: relative;

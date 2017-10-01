@@ -1,0 +1,101 @@
+.navbar {
+  background: transparent;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.navbar li {
+  color: #000;
+}
+
+.navbar .seperateLineInclude { 
+  border-right:solid 2px grey;
+} 
+
+.navbar-nav > li > a, .navbar-brand {
+    padding-top:2px !important; padding-bottom:2 !important;
+    height: 24px;
+}
+.navbar {min-height:24px !important;}
+
+#manageAnchor {
+  padding-left: 0px;
+}
+
+.navbar .container-fluid {
+  padding-left: 0px;
+}
+
+.navbar-default .navbar-nav>li>a {
+    color: blue;
+}
+
+img {
+  height: 150px;
+  width: 200px;
+}
+
+#fileUpload {
+  border: solid 2px grey;
+  padding: 35px;
+}
+
+#uploadRow {
+  margin-top: 35px;
+  margin-bottom: 35px;
+}
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+.next::after {
+  right: -22px;
+  border-width: 11px;
+  border-color: transparent transparent transparent #0d5287;
+}
+.next:hover::after {
+  border-left-color: #0585e8;
+}
+
+.button {
+  position: relative;
+  margin: 0;
+  padding-left: 14px;
+  padding-right: 14px;
+  padding-top: 2.8px;
+  padding-bottom: 2.8px;
+  background: #0d5287;
+  color: white;
+  font-size: 14px;
+}
+.button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 0;
+  height: 0;
+}
+.button:hover {
+  background: #0585e8;
+}
+
+.next::after {
+  border-style: solid;
+}

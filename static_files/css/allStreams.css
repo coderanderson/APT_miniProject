@@ -1,29 +1,70 @@
-div {
+
+h2 {
+  margin-bottom: 40px;
+}
+
+div#photoGroup {
   font-size: 0;
 }
 
-a {
-  font-size: 16px; 
+a.photoBlocks {
+  font-size: 64px;
+  overflow: hidden;
   display: inline-block;
-  margin-bottom: 8px;
-  width: calc(50% - 4px);
-  margin-right: 8px;
+  margin-bottom: 64px;
+  width: calc(50% - 32px);
+  margin-right: 64px;
 }
 
-a:nth-of-type(2n) {
+a.photoBlocks:nth-of-type(2n) {
   margin-right: 0;
 }
 
 @media screen and (min-width: 50em) {
-  a {
-    width: calc(25% - 6px);
+  a.photoBlocks {
+    width: calc(25% - 48px);
   }
-
-  a:nth-of-type(2n) {
-    margin-right: 8px;
+  
+  a.photoBlocks:nth-of-type(2n) {
+    margin-right: 64px;
   }
-
-  a:nth-of-type(4n) {
+  
+  a.photoBlocks:nth-of-type(4n) {
     margin-right: 0;
   }
+}
+
+a.photoBlocks:hover img {
+  transform: scale(1.08);
+}
+
+figure {
+  margin: 0;
+  position: relative;
+}
+
+img {
+  border: none;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  background: #ccc;
+  transition: transform .2s ease-in-out;
+}
+
+.text {
+  background: rgba(255, 255, 255, 0.6);
+  z-index: 50;
+  position: absolute;
+  color: black;
+  font-size: 22px;
+  font-weight: bold;
+  left: calc(10%);
+  right: calc(10%);
+  bottom: 35%;
+  top: 40%;
+  /*margin: auto;*/
+  padding: 5px;
+  text-align: center;
+  /*vertical-align: middle;*/
 }

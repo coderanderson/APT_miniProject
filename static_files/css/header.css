@@ -1,15 +1,15 @@
 .navbar {
-	background: transparent;
-	background-color: transparent;
-	border-color: transparent;
+  background: transparent;
+  background-color: transparent;
+  border-color: transparent;
 }
 
 .navbar li {
-	color: #000;
+  color: #000;
 }
 
 .navbar .seperateLineInclude { 
-	border-right:solid 2px grey;
+  border-right:solid 2px grey;
 } 
 
 .navbar-nav > li > a, .navbar-brand {
@@ -19,11 +19,11 @@
 .navbar {min-height:24px !important;}
 
 #manageAnchor {
-	padding-left: 0px;
+  padding-left: 0px;
 }
 
 .navbar .container-fluid {
-	padding-left: 0px;
+  padding-left: 0px;
 }
 
 .navbar-default .navbar-nav>li>a {
