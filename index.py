@@ -118,7 +118,7 @@ app = webapp2.WSGIApplication([
     ('/PhotoUpload', PhotoUpload),
     ('/submitPhoto', PhotoCreator),
     ('/img', PhotoViewer),
-    ('/Management', Management),
+    ('/management', Management),
     ('/AllStreams', AllStreams)
 ], debug=True)
 # [END app]

@@ -1,0 +1,35 @@
+td, th {
+    border-right: 2px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 25px;
+}
+
+.streamName {
+	color: #0095B6;
+	text-decoration: underline;
+}
+
+.sortButton {
+	color: black;
+	text-align: right;
+	right: 0;
+	display:inline-block;
+	width:19%;
+}
+
+.sortButton:hover {
+	text-decoration: none;
+}
+
+.sortButtonText {
+	display: inline-block;
+	width:75%;
+}
