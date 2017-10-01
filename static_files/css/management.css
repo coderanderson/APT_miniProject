@@ -4,6 +4,7 @@ td, th {
     padding: 8px;
 }
 
+
 table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
@@ -32,4 +33,8 @@ table {
 .sortButtonText {
 	display: inline-block;
 	width:75%;
+}
+
+.rightBoundry {
+	border-right: 0;
 }
