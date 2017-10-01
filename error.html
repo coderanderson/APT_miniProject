@@ -9,7 +9,14 @@
     <body>
         <div class="container">
             {% include 'header.html' %}
-            
+            <div class="row" id="area">
+                <div class="col-sm-2">
+                    <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+                </div>
+                <div class="col-sm-6">
+                    <span>Error: you tried to create a new stream whose name is the same as an existing stream; operation did not complete.</span>
+                </div>
+            </div>
         </div>
     </body>
 </html>
