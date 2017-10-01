@@ -15,6 +15,8 @@ app = webapp2.WSGIApplication([
         methods=['POST']),
     webapp2.Route('/', StreamController, handler_method='show_create_menu',\
         methods=['GET']),
+    webapp2.Route('/invite', StreamController, handler_method='invite',\
+        methods=['GET']),
 
     webapp2.Route('/upload_photo', PhotoController, handler_method='show_upload_menu',\
         methods=['GET']),
