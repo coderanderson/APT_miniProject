@@ -42,6 +42,18 @@ class MainPage(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('index.html')
         self.response.write(template.render({}))
 
+class Management(webapp2.RequestHandler):
+
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('management.html')
+        self.response.write(template.render({}))
+
+class AllStreams(webapp2.RequestHandler):
+
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('allStreams.html')
+        self.response.write(template.render({}))
+
 class PhotoUpload(webapp2.RequestHandler):
 
     def get(self):
@@ -106,5 +118,7 @@ app = webapp2.WSGIApplication([
     ('/PhotoUpload', PhotoUpload),
     ('/submitPhoto', PhotoCreator),
     ('/img', PhotoViewer),
+    ('/Management', Management),
+    ('/AllStreams', AllStreams)
 ], debug=True)
 # [END app]
