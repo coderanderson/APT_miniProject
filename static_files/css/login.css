@@ -1,0 +1,18 @@
+
+body {
+	background: url("https://petapixel.com/assets/uploads/2017/08/hzCXKOP-800x580.jpg");
+	background-size: cover;
+}
+
+.jumbotron {
+	margin:  100px 100px;
+}
+
+form {
+	margin: 100px 100px;
+	width: 32%;
+	z-index: 50;
+	padding: 20px 20px;
+	background: rgba(256, 256, 256, 0.6);
+	border-radius: 5px;
+}
