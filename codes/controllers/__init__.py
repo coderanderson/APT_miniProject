@@ -1,2 +1,2 @@
-import PhotoController
-import StreamController
+import api
+import view

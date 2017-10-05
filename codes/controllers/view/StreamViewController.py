@@ -1,15 +1,13 @@
 import webapp2
 import urllib
-from codes.models.Stream import *
-from codes.models.Photo import *
-from codes.models.User import *
+from codes.models import *
 from google.appengine.ext import ndb
 from google.appengine.api import users as gusers
 from google.appengine.api import search
 
 STREAM_INDEX = 'stream_index'
 
-class StreamController(webapp2.RequestHandler):
+class StreamViewController(webapp2.RequestHandler):
     def view(self):
         per_page = 10
         stream_name = self.request.get('stream_name', DEFAULT_STREAM_NAME)
@@ -38,37 +36,6 @@ class StreamController(webapp2.RequestHandler):
                 'photo_urls': photo_urls}
         template = StreamController.JINJA_ENVIRONMENT.get_template('stream.html')
         self.response.write(template.render(template_values))
-
-    def create(self):
-        if gusers.get_current_user():
-            stream_name = self.request.get('stream_name', DEFAULT_STREAM_NAME)
-            cover_url = self.request.get('cover_url', '')
-
-            user = User(email=gusers.get_current_user().email())
-            user.put()
-            stream = Stream()
-            if cover_url:
-                stream.cover_url = cover_url
-            stream.name = stream_name
-            stream.tags = self.request.get('tags', '')
-            stream.owner = user
-            stream.put()
-            search.Index(name=STREAM_INDEX).put(stream)
-
-            invitee_emails = self.request.get('invitee_emails', '')
-            invitee_emails = [ e.strip() for e in invitee_emails.split(',') ]
-            invitation_link = self.request.host_url + '/invite?stream_name=' + stream_name
-            email_body = StreamController.JINJA_ENVIRONMENT.get_template('invitation.html')
-            email_body = email_body.render({'invitation_link': invitation_link,\
-                'message': message, 'stream_name': 'stream_name'})
-
-            for e in invitee_emails:
-                mail.send_mail(sender=gusers.get_current_user().email(), to=e,\
-                    subject="Stream Invitation",body=email_body)
-
-            self.redirect('/manage')
-        else:
-            self.error(403)
 
     def show_create_menu(self):
         template = StreamController.JINJA_ENVIRONMENT.get_template('index.html')

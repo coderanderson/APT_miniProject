@@ -1,6 +1,5 @@
 from google.appengine.ext import ndb
-# from codes.models.Stream import Stream
 
 class ViewRecord(ndb.Model):
     date = ndb.DateTimeProperty(auto_now_add=True)
-    stream = ndb.KeyProperty(kind=Stream, collection_name='view_records')
+    stream = ndb.KeyProperty(kind='Stream')

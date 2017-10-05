@@ -1,4 +1,4 @@
-import Photo
-import Stream
-import User
-# import ViewRecord
+from User import *
+from Stream import *
+from Photo import *
+from ViewRecord import *

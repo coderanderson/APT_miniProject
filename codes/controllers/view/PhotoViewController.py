@@ -1,10 +1,9 @@
 import webapp2
 import urllib
-from codes.models.Photo import *
-from codes.models.Stream import stream_key, DEFAULT_STREAM_NAME
+from codes.models.Models import *
 from google.appengine.ext import ndb
 
-class PhotoController(webapp2.RequestHandler):
+class PhotoViewController(webapp2.RequestHandler):
     def view(self):
         try:
             photo_key = ndb.Key(urlsafe=self.request.get('img_id'))
