@@ -1,5 +1,6 @@
 from google.appengine.ext import ndb
 import codes
+import datetime
 
 DEFAULT_STREAM_NAME = 'default_stream'
 DEFAULT_STREAM_COVER_URL = '/static_files/img/no_cover.png'
@@ -19,3 +20,10 @@ class Stream(ndb.Model):
     @property
     def view_records(self):
         return codes.models.ViewRecord.gql("WHERE stream = :1", self.key)
+
+    @classmethod
+    def remove_old_view_records(cls, duration=3600):
+        bound = datetime.datetime.now() - datetime.timedelta(0, duration)
+        keys = [ v.key for v in codes.models.ViewRecord.query().filter(codes.models.ViewRecord.date < bound).fetch() ]
+        for k in keys:
+            k.delete()

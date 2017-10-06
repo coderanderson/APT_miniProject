@@ -71,7 +71,7 @@ class StreamAPIController(webapp2.RequestHandler):
         self.response.headers['Content-Type'] = 'application/json'
 
         stream_name = self.request.get('stream_name', DEFAULT_STREAM_NAME)
-        page = int(self.request.get('page', 0))
+        page = int(self.request.get('page', 1))
         per_page = int(self.request.get('per_page', 10))
 
         stream = Stream.query().filter(Stream.name == stream_name).get()
@@ -80,8 +80,8 @@ class StreamAPIController(webapp2.RequestHandler):
             self.error(404)
             return
 
-        total_pages = int(math.ceil(stream.photos.count()/per_page))
-        photos = stream.photos.fetch(per_page, offset=per_page * page)
+        total_pages = int(math.ceil(stream.photos.count()*1.0/per_page))
+        photos = stream.photos.order(-Photo.creation_date).fetch(per_page, offset=per_page * (page - 1))
         photo_urls = ['/get_photo?img_id='+p.key.urlsafe() for p in photos]
 
         vr = ViewRecord(stream = stream.key)
@@ -127,7 +127,7 @@ class StreamAPIController(webapp2.RequestHandler):
         freq = {}
         bound = datetime.datetime.now() - datetime.timedelta(0, duration)
         for s in streams:
-            c = s.photos.filter(Photo.creation_date > bound).count()
+            c = s.view_records.filter(ViewRecord.date > bound).count()
             cover_url = s.cover_url
             if not cover_url:
                 cover_url = DEFAULT_STREAM_COVER_URL
@@ -140,6 +140,7 @@ class StreamAPIController(webapp2.RequestHandler):
             element['count']=s[1][0]
             element['cover_url']=s[1][1]
             result.append(element)
+
         self.response.out.write(json.dumps(result))
         self.response.set_status(200)
 
@@ -147,16 +148,16 @@ class StreamAPIController(webapp2.RequestHandler):
         if gusers.get_current_user():
             stream_name = self.request.get('stream_name', DEFAULT_STREAM_NAME)
             stream = Stream.query().filter(Stream.name == stream_name).get()
-            user = User.query().filter(User.email == gusers.get_current_user().email).get()
+            user = User.query().filter(User.email == gusers.get_current_user().email()).get()
             if stream:
                 if not user:
-                    user = User(email = gusers.get_current_user().email, subscription_list=[])
+                    user = User(email = gusers.get_current_user().email(), subscription_list=[])
                 user.subscription_list.append(stream.key)
                 user.put()
             else:
                 self.error(400)
         else:
-            self.redirect(gusers.create_login_url('/invite?stream_name=' + stream_name))
+            self.redirect(gusers.create_login_url(self.request.referer))
 
     def management(self):
         self.response.headers['Content-Type'] = 'application/json'

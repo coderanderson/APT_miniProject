@@ -4,7 +4,6 @@ from codes.models import *
 from google.appengine.ext import ndb
 
 class PhotoAPIController(webapp2.RequestHandler):
-
     def create(self):
         self.response.headers['Content-Type'] = 'application/json'
 
