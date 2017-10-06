@@ -3,7 +3,6 @@ import urllib
 from codes.models import *
 from google.appengine.ext import ndb
 from google.appengine.api import users as gusers
-from google.appengine.api import search
 
 STREAM_INDEX = 'stream_index'
 
@@ -40,22 +39,6 @@ class StreamViewController(webapp2.RequestHandler):
     def show_create_menu(self):
         template = StreamController.JINJA_ENVIRONMENT.get_template('index.html')
         self.response.write(template.render({}))
-
-    def all_streams(self):
-        stream_name = self.request.get('stream_name', '')
-        streams = []
-        if stream_name:
-            streams = search.Index(STREAM_INDEX).search(stream_name)
-        else:
-            streams = Stream.query().fetch()
-        result = []
-        for s in streams:
-            cover_url=s.cover_url
-            if not cover_url:
-                cover_url = DEFAULT_STREAM_COVER_URL
-            result.append({'name': s.name, 'cover_url': cover_url})
-        template = StreamController.JINJA_ENVIRONMENT.get_template('all_stream.html')
-        self.response.write(template.render({'streams': result}))
 
     def invite(self):
         if gusers.get_current_user():
@@ -123,7 +106,6 @@ class StreamViewController(webapp2.RequestHandler):
             user = User.query().filter(User.email == user_email).get()
             for unname in unsubscribe_list:
                 stream = Stream.query().filter(Stream.name == unname).get()
-                search.Index(name=STREAM_INDEX).delete(stream)
                 key = stream.key
                 if key in user.subscription_list:
                     user.subscription_list.remove(key)

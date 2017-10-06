@@ -11,7 +11,6 @@ from codes.models import *
 
 from google.appengine.ext import ndb
 from google.appengine.api import users as gusers
-from google.appengine.api import search
 from google.appengine.api import mail
 
 STREAM_INDEX = 'stream_index'
@@ -52,8 +51,6 @@ class StreamAPIController(webapp2.RequestHandler):
                 stream.put()
                 user.subscription_list.append(stream.key)
                 user.put()
-                # TODO: add search later
-                #search.Index(STREAM_INDEX).put(stream)
 
                 invitee_emails = [ e.strip() for e in invitee_emails.split(',') if e.strip()!='' ]
                 invitation_link = self.request.host_url + '/invite?stream_name=' + stream_name
@@ -110,7 +107,7 @@ class StreamAPIController(webapp2.RequestHandler):
         stream_name = self.request.get('stream_name', '')
         streams = []
         if stream_name:
-            streams = search.Index(STREAM_INDEX).search(stream_name)
+            streams = [ s for s in Stream.query().fetch() if (stream_name in s.name) ]
         else:
             streams = Stream.query().fetch()
         result = []
@@ -213,7 +210,6 @@ class StreamAPIController(webapp2.RequestHandler):
             user = User.query().filter(User.email == user_email).get()
             for unname in unsubscribe_list:
                 stream = Stream.query().filter(Stream.name == unname).get()
-                search.Index(name=STREAM_INDEX).delete(stream)
                 key = stream.key
                 if key in user.subscription_list:
                     user.subscription_list.remove(key)
