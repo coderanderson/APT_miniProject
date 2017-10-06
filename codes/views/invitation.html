@@ -1,0 +1,15 @@
+<html>
+    <head>
+    </head>
+    <body>
+        <h1>Invitation to {{ stream_name }}</h1>
+        <br/>
+        {% if message %}
+            <pre>{{ message }}</pre>
+        {% endif %}
+        <br/>
+        <h3>Click on the link below to subscribe the new stream</h3>
+        <br/>
+        <a href="{{ invitation_link }}">{{ invitation_link }}</a>
+    </body>
+</html>

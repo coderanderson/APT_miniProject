@@ -4,15 +4,11 @@ threadsafe: true
 
 # [START handlers]
 handlers:
-# - url: /favicon\.ico
-  # static_files: favicon.ico
-  # upload: favicon\.ico
-
 - url: /static_files
   static_dir: static_files
 
 - url: /.*
-  script: index.app
+  script: app.app
 # [END handlers]
 
 # [START libraries]
