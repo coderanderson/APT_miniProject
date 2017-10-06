@@ -1,8 +1,10 @@
 import webapp2
 import urllib
 import time
+import datetime
 import json
 import math
+import operator
 
 import codes
 from codes.models import *
@@ -83,7 +85,7 @@ class StreamAPIController(webapp2.RequestHandler):
 
         total_pages = int(math.ceil(stream.photos.count()/per_page))
         photos = stream.photos.fetch(per_page, offset=per_page * page)
-        photo_urls = [p.key.urlsafe() for p in photos]
+        photo_urls = ['/get_photo?img_id='+p.key.urlsafe() for p in photos]
 
         vr = ViewRecord(stream = stream.key)
         vr.put()
@@ -117,6 +119,30 @@ class StreamAPIController(webapp2.RequestHandler):
             if not cover_url:
                 cover_url = DEFAULT_STREAM_COVER_URL
             result.append({'name': s.name, 'cover_url': cover_url})
+        self.response.out.write(json.dumps(result))
+        self.response.set_status(200)
+
+    def trending_streams(self):
+        self.response.headers['Content-Type'] = 'application/json'
+
+        duration = int(self.request.get('duration', 60*60))
+        streams = Stream.query().fetch()
+        freq = {}
+        bound = datetime.datetime.now() - datetime.timedelta(0, duration)
+        for s in streams:
+            c = s.photos.filter(Photo.creation_date > bound).count()
+            cover_url = s.cover_url
+            if not cover_url:
+                cover_url = DEFAULT_STREAM_COVER_URL
+            freq[s.name] = (c, cover_url)
+        series = sorted(freq.items(), key=operator.itemgetter(1), reverse=True)
+        result=[]
+        for s in series:
+            element = {}
+            element['name']=s[0]
+            element['count']=s[1][0]
+            element['cover_url']=s[1][1]
+            result.append(element)
         self.response.out.write(json.dumps(result))
         self.response.set_status(200)
 

@@ -12,7 +12,7 @@ class PhotoViewController(webapp2.RequestHandler):
                 self.response.headers['Content-Type'] = 'image/png'
                 self.response.out.write(photo.data)
             else:
-                raise 404
+                self.error(404)
         except:
             self.error(404)
 
