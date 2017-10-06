@@ -16,18 +16,8 @@ from google.appengine.api import mail
 STREAM_INDEX = 'stream_index'
 
 class StreamAPIController(webapp2.RequestHandler):
-    # TODO: remove login
-    def login(self):
-        email = ''
-        if gusers.get_current_user():
-            email = gusers.get_current_user().email()
-            login = gusers.create_logout_url(self.request.uri)
-        else:
-            email=''
-            login = gusers.create_login_url(self.request.uri)
-        self.response.write(email+'<br/>'+'<a href="'+login+'" > login </a>')
 
-    def create(self):
+    def create(self, from_view=False):
         if gusers.get_current_user():
             stream_name = self.request.get('stream_name', DEFAULT_STREAM_NAME)
             cover_url = self.request.get('cover_url', '')
@@ -36,12 +26,14 @@ class StreamAPIController(webapp2.RequestHandler):
             stream = Stream.query().filter(Stream.name == stream_name).get()
 
             if stream:
-                self.response.set_status(409)
-                self.response.out.write(json.dumps({ 'error': 'duplicate stream name' }))
+                result={ 'error': 'duplicate stream name' }
+                if not from_view:
+                    self.response.set_status(409)
+                    self.response.out.write(json.dumps(result))
+                else:
+                    return result
             else:
                 user = User.query().filter(User.email == gusers.get_current_user().email()).get()
-                if not user:
-                    user = User(email=gusers.get_current_user().email())
                 stream = Stream()
                 if cover_url:
                     stream.cover_url = cover_url
@@ -51,6 +43,8 @@ class StreamAPIController(webapp2.RequestHandler):
                 stream.put()
                 user.subscription_list.append(stream.key)
                 user.put()
+                stream.owner = user.key
+                stream.put()
 
                 invitee_emails = [ e.strip() for e in invitee_emails.split(',') if e.strip()!='' ]
                 invitation_link = self.request.host_url + '/invite?stream_name=' + stream_name
@@ -63,9 +57,15 @@ class StreamAPIController(webapp2.RequestHandler):
                     mail.send_mail(sender=gusers.get_current_user().email(), to=e,\
                         subject="Stream Invitation",body='', html=email_body)
 
-                self.response.set_status(200)
+                if not from_view:
+                    self.response.set_status(200)
+                else:
+                    return None
         else:
-            self.error(403)
+            if not from_view:
+                self.error(403)
+            else:
+                return {'error': 'you should login first'}
 
     def view(self):
         self.response.headers['Content-Type'] = 'application/json'
@@ -144,21 +144,6 @@ class StreamAPIController(webapp2.RequestHandler):
         self.response.out.write(json.dumps(result))
         self.response.set_status(200)
 
-    def invite(self):
-        if gusers.get_current_user():
-            stream_name = self.request.get('stream_name', DEFAULT_STREAM_NAME)
-            stream = Stream.query().filter(Stream.name == stream_name).get()
-            user = User.query().filter(User.email == gusers.get_current_user().email()).get()
-            if stream:
-                if not user:
-                    user = User(email = gusers.get_current_user().email(), subscription_list=[])
-                user.subscription_list.append(stream.key)
-                user.put()
-            else:
-                self.error(400)
-        else:
-            self.redirect(gusers.create_login_url(self.request.referer))
-
     def management(self):
         self.response.headers['Content-Type'] = 'application/json'
         def get_stream_data(stream):
@@ -167,6 +152,7 @@ class StreamAPIController(webapp2.RequestHandler):
             last_new_photo_date = ''
             if number_of_photos > 0:
                 last_new_photo_date = stream.photos.order(-Photo.creation_date).get().creation_date
+                last_new_photo_date = str(last_new_photo_date)
             else:
                 last_new_photo_date = time.strftime('%m/%d/%Y', time.gmtime(0))
 
@@ -187,23 +173,26 @@ class StreamAPIController(webapp2.RequestHandler):
             self.response.out.write(json.dumps({ 'error': 'not logged in' }))
 
     def delete_selected_streams(self):
-        remove_list = self.request.get('streams', allow_multiple=True)
-        make_management_changes(self, remove_list, [])
+        remove_list = self.request.get('streams').split(',')
+        self.make_management_changes(remove_list, [])
 
     def unsubscribe_selected_streams(self):
-        unsubscribe_list = self.request.get('streams', allow_multiple=True)
-        make_management_changes(self, [], unsubscribe_list)
+        unsubscribe_list = self.request.get('streams').split(',')
+        self.make_management_changes([], unsubscribe_list)
 
     def make_management_changes(self, remove_list, unsubscribe_list):
+        self.response.headers['Content-Type'] = 'application/json'
         if gusers.get_current_user():
 
             user_email = gusers.get_current_user().email()
 
             for rname in remove_list:
                 stream = Stream.query().filter(Stream.name == rname).get()
+                if not stream:
+                    continue
                 key = stream.key
-                if stream.owner.email == user_email:
-                    for u in stream.members():
+                if stream.owner.get().email == user_email:
+                    for u in stream.members.fetch():
                         u.subscription_list.remove(key)
                         u.put()
                     key.delete()
@@ -215,6 +204,7 @@ class StreamAPIController(webapp2.RequestHandler):
                 if key in user.subscription_list:
                     user.subscription_list.remove(key)
                 user.put()
-            self.redirect('/manage')
+            self.response.set_status(200)
         else:
-            self.error(403)
+            self.response.set_status(403)
+            self.response.out.write(json.dumps({ 'error': 'not logged in' }))

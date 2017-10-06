@@ -1,5 +1,6 @@
 import webapp2
 import urllib
+from codes.models import *
 from codes.models.Models import *
 from google.appengine.ext import ndb
 
@@ -22,10 +23,16 @@ class PhotoViewController(webapp2.RequestHandler):
 
     def create(self):
         stream_name = self.request.get('stream_name', DEFAULT_STREAM_NAME)
-        photo = Photo(parent=stream_key(stream_name))
+        stream = Stream.query().filter(Stream.name == stream_name).get()
+        if not stream:
+            self.response.set_status(400)
+            self.response.out.write(json.dumps({'error': 'stream not found'}))
+
+        photo = Photo(stream = stream.key)
         photo_data = self.request.get('photo_data')
         photo.data = photo_data
         photo.put()
-        query_params = {'stream_name': stream_name}
+        self.response.set_status(200)
+        query_params = {'stream_name': stream_name, 'All':1}
         self.redirect('/view_stream?' + urllib.urlencode(query_params))
 
