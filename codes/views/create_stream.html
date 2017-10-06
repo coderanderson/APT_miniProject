@@ -11,7 +11,7 @@
         <div class="container">
           {% include 'header.html' %}
           <div class="row">
-            <form action="/CreateStream" method="post">
+            <form action="/create_stream" method="post" id="create_form">
               <div class="row">
                 <div class="col-sm-6">
                   <div class="form-group">
@@ -24,24 +24,24 @@
                   </div>
                   <div class="form-group">
                     <label for="subscribers">Add Subscribers</label>
-                    <textarea class="form-control" placeholder="abc@abc.com" rows="5"></textarea>
+                    <textarea class="form-control" placeholder="abc@abc.com" rows="5" form="create_form" name="invitee_emails"></textarea>
                   </div>
                   <div class="form-group">
-                    <textarea class="form-control" 
+                    <textarea class="form-control" form="create_form"
                               placeholder="Optional message for invite" 
-                              rows="3"></textarea>
+                              rows="3" name="message"></textarea>
                   </div>
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group">
                     <label for="tags">Tag your stream</label>
-                    <textarea class="form-control" 
-                              placeholder="#AdnanFriends, #FB, #1985" 
+                    <textarea class="form-control"  form="create_form"
+                              placeholder="#AdnanFriends, #FB, #1985" name="tags"
                               rows="3"></textarea>
                   </div>
                   <div class="form-group">
                     <label for="coverImage">URL to cover image</label>
-                    <textarea class="form-control" 
+                    <textarea class="form-control" form="create_form" name="cover_url"
                               placeholder="http://flickr.com/cat_image.png" 
                               rows="1"></textarea>
                   </div>

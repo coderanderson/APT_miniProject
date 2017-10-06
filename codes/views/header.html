@@ -1,15 +1,17 @@
 <div class="row" id="header">
-  <h1 class="display-3">Connex.us</h1>
+  {% if not login_page %}
+    <h1 class="display-3">Connex.us</h1>
+  {% endif %}
   <nav class="navbar transparent navbar-default">
     <div class="container-fluid">
       <ul class="nav navbar-nav">
-        <li class="seperateLineInclude"><a href="#" id="manageAnchor">Manage</a></li>
-        <li class="seperateLineInclude"><a href="#">Create</a></li>
-        <li class="seperateLineInclude"><a href="#">View</a></li>
+        <li class="seperateLineInclude"><a href="/manage" id="manageAnchor">Manage</a></li>
+        <li class="seperateLineInclude"><a href="/create_stream_menu">Create</a></li>
+        <li class="seperateLineInclude"><a href="/view_all">View</a></li>
         <li class="seperateLineInclude"><a href="#">Search</a></li>
         <li class="seperateLineInclude"><a href="#">Trending</a></li>
         <li class="seperateLineInclude"><a href="#">Social</a></li>
-        <li><a href="#">Log Out</a></li>
+        <li class="seperateLineInclude"><a href="{{ signurl|safe }}">{{ signtext }}</a></li>
       </ul>
     </div>
   </nav>
