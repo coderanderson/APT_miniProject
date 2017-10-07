@@ -1,6 +1,10 @@
 indexes:
-- kind: Greeting
-  ancestor: yes
+- kind: Photo
   properties:
-  - name: date
+  - name: stream
+  - name: creation_date
     direction: desc
+- kind: ViewRecord
+  properties:
+  - name: stream
+  - name: date

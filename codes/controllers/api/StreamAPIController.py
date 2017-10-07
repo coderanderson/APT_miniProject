@@ -176,7 +176,7 @@ class StreamAPIController(webapp2.RequestHandler):
                             s['name']+'">'+s['name']+'</a><br/>'
                     email_body+='</body></html>'
 
-                    mail.send_mail(sender='ali.moez.gholami@gmail.com', to=user.email,\
+                    mail.send_mail(sender='anything@apt-s17-am79848.appspotmail.com', to=user.email,\
                             subject="Trending Streams",body='', html=email_body)
                     user.last_trending_sent = now
                     user.put()
