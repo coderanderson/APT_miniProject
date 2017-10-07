@@ -29,7 +29,7 @@ app = webapp2.WSGIApplication([
     webapp2.Route('/api/delete_streams', StreamAPIController,\
         handler_method='delete_selected_streams', methods=['POST']),
     webapp2.Route('/api/cron_trending_streams', StreamAPIController,\
-            handler_method='cron_trending_streams', methods=['POST']),
+            handler_method='cron_trending_streams', methods=['POST','GET']),
 
     webapp2.Route('/api/upload_photo', PhotoAPIController, handler_method='create',\
         methods=['POST']),

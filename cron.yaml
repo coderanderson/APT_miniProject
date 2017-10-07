@@ -1,4 +1,4 @@
 cron:
 - description: send trending streams
   url: /api/cron_trending_streams
-  schedule: every 5 minutes
+  schedule: every 5 mins
