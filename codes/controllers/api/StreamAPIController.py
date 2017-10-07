@@ -12,6 +12,7 @@ from codes.models import *
 from google.appengine.ext import ndb
 from google.appengine.api import users as gusers
 from google.appengine.api import mail
+from google.appengine.api import urlfetch
 
 STREAM_INDEX = 'stream_index'
 
@@ -143,6 +144,10 @@ class StreamAPIController(webapp2.RequestHandler):
 
         self.response.out.write(json.dumps(result))
         self.response.set_status(200)
+
+    def run_cron(self):
+        result = urlfetch.fetch('https://apt-s17-am79848.appspot.com/api/cron_trending_streams')
+        self.response.set_status(result.status_code, method      = urlfetch.POST)
 
     def cron_trending_streams(self):
         duration = 60*60

@@ -18,7 +18,7 @@ function getManagementData(){
         for(var i=0; i<data.owned_streams.length; i++)
         {
             var s = data.owned_streams[i]
-            var td = '<tr class="sstream_data"><td class="streamName" id="'+s.name+'">'+
+            var td = '<tr class="ostream_data"><td class="streamName" id="'+s.name+'">'+
                 '<a href="/view_stream?stream_name='+s.name+'">'+s.name+'</a>'+
                 '</td><td>'+s.last_new_photo_date+'</td>'+
                 '<td>'+s.number_of_photos+'</td>'+
@@ -45,7 +45,7 @@ function getCheckedStream(className, action) {
     var result=[]
     $("."+className).each(function(i,item){
         
-        sname = $(item).find('.streamName').html()
+        sname = $(item).find('.streamName a').html()
         scheck = $(item).find('#checkbox').is(":checked")
         if(scheck)
         {

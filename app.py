@@ -28,6 +28,8 @@ app = webapp2.WSGIApplication([
         handler_method='unsubscribe_selected_streams', methods=['POST']),
     webapp2.Route('/api/delete_streams', StreamAPIController,\
         handler_method='delete_selected_streams', methods=['POST']),
+    webapp2.Route('/api/run_cron', StreamAPIController,\
+            handler_method='run_cron', methods=['POST','GET']),
     webapp2.Route('/api/cron_trending_streams', StreamAPIController,\
             handler_method='cron_trending_streams', methods=['POST','GET']),
 
