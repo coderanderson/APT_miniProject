@@ -1,5 +1,6 @@
 import webapp2
 import urllib
+import urllib2
 import time
 import datetime
 import json
@@ -146,8 +147,9 @@ class StreamAPIController(webapp2.RequestHandler):
         self.response.set_status(200)
 
     def run_cron(self):
-        result = urlfetch.fetch('https://apt-s17-am79848.appspot.com/api/cron_trending_streams')
-        self.response.set_status(result.status_code, method      = urlfetch.POST)
+        some_url = 'https://apt-s17-am79848.appspot.com/api/cron_trending_streams'
+        content = urllib2.urlopen(some_url).read()
+        self.response.set_status(200)
 
     def cron_trending_streams(self):
         duration = 60*60
