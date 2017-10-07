@@ -2,6 +2,7 @@ import webapp2
 import urllib
 import codes
 import math
+import datetime
 from codes.models import *
 from codes.controllers.view.UserViewController import UserViewController
 from google.appengine.ext import ndb
@@ -173,6 +174,62 @@ class StreamViewController(webapp2.RequestHandler):
         template = StreamViewController.JINJA_ENVIRONMENT.get_template('allStreams.html')
         self.response.write(template.render(template_values))
 
+    def update_trending_info(self):
+        duration = int(self.request.get('interval', 60*60))
+        from_view = True
+        if gusers.get_current_user():
+            user = User.query().filter(User.email == gusers.get_current_user().email()).get()
+            if duration is 0:
+                user.getting_trendings = False
+            else:
+                user.getting_trendings = True
+                user.trendings_interval = duration
+                user.last_trending_sent = datetime.datetime.now()
+            user.put()
+            self.redirect('/trending')
+        else:
+            result = {
+                'signurl': gusers.create_login_url('/'),
+                'signtext': 'Login',
+                'error': 'you should login first'
+            }
+            template = StreamViewController.JINJA_ENVIRONMENT.get_template('error.html')
+            self.response.write(template.render(result))
+
+    def show_trending_streams(self):
+        streams = []
+        streams = TrendingStream.query().fetch()
+        result = []
+        for s in streams:
+            cover_url=s.cover_url
+            if not cover_url:
+                cover_url = DEFAULT_STREAM_COVER_URL
+            result.append({'name': s.name, 'cover_url': cover_url, 'count': s.count})
+        user = gusers.get_current_user()
+        if user:
+            url = gusers.create_logout_url(self.request.uri)
+            url_linktext = 'Logout'
+            _user = User.query().filter(User.email == gusers.get_current_user().email()).get()
+            if not _user:
+                _user = User(email=gusers.get_current_user().email())
+                _user.put()
+        else:
+            url = gusers.create_login_url(self.request.uri)
+            url_linktext = 'Login'
+        covers=[]
+        names=[]
+        counts=[]
+        for o in result:
+            covers.append(o['cover_url'])
+            names.append(o['name'])
+            counts.append(o['count'])
+        template_values = {
+                'signurl': url,
+                'signtext': url_linktext,
+                'names': names, 'covers':covers, 'counts': counts}
+        template = StreamViewController.JINJA_ENVIRONMENT.get_template('trending.html')
+        self.response.write(template.render(template_values))
+
     def invite(self):
         if gusers.get_current_user():
             stream_name = self.request.get('stream_name', DEFAULT_STREAM_NAME)
@@ -187,6 +244,47 @@ class StreamViewController(webapp2.RequestHandler):
                 self.error(400)
         else:
             self.redirect(gusers.create_login_url('/'))
+
+    def search_stream(self):
+        query = self.request.get('search', '')
+        if query:
+            streams = [ s for s in Stream.query().fetch() if (query in s.name or query in s.tags) ]
+        else:
+            streams = []
+        user = gusers.get_current_user()
+        if user:
+            url = gusers.create_logout_url(self.request.uri)
+            url_linktext = 'Logout'
+            _user = User.query().filter(User.email == gusers.get_current_user().email()).get()
+            if not _user:
+                _user = User(email=gusers.get_current_user().email())
+                _user.put()
+        else:
+            url = gusers.create_login_url(self.request.uri)
+            url_linktext = 'Login'
+
+        result=[]
+        for s in streams:
+            cover_url=s.cover_url
+            if not cover_url:
+                cover_url = DEFAULT_STREAM_COVER_URL
+            result.append({'name': s.name, 'cover_url': cover_url})
+
+        covers=[]
+        names=[]
+        for o in result:
+            covers.append(o['cover_url'])
+            names.append(o['name'])
+        template_values = {
+                'signurl': url,
+                'signtext': url_linktext,
+                'query': query,
+                'count': len(streams),
+                'names': names,
+                'covers': covers
+                }
+        template = StreamViewController.JINJA_ENVIRONMENT.get_template('search.html')
+        self.response.write(template.render(template_values))
 
     def show_manage_menu(self):
         template_values = {}

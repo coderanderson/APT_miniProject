@@ -1,7 +1,6 @@
 import webapp2
 import urllib
 from codes.models import *
-from codes.models.Models import *
 from google.appengine.ext import ndb
 
 class PhotoViewController(webapp2.RequestHandler):

@@ -27,3 +27,8 @@ class Stream(ndb.Model):
         keys = [ v.key for v in codes.models.ViewRecord.query().filter(codes.models.ViewRecord.date < bound).fetch() ]
         for k in keys:
             k.delete()
+
+class TrendingStream(ndb.Model):
+    name = ndb.StringProperty(indexed=True)
+    cover_url = ndb.StringProperty()
+    count = ndb.IntegerProperty()

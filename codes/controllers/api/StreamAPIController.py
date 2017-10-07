@@ -104,10 +104,10 @@ class StreamAPIController(webapp2.RequestHandler):
 
     def all_streams(self):
         self.response.headers['Content-Type'] = 'application/json'
-        stream_name = self.request.get('stream_name', '')
+        query = self.request.get('query', '')
         streams = []
-        if stream_name:
-            streams = [ s for s in Stream.query().fetch() if (stream_name in s.name) ]
+        if query:
+            streams = [ s for s in Stream.query().fetch() if (query in s.name or query in s.tags) ]
         else:
             streams = Stream.query().fetch()
         result = []
@@ -142,6 +142,52 @@ class StreamAPIController(webapp2.RequestHandler):
             result.append(element)
 
         self.response.out.write(json.dumps(result))
+        self.response.set_status(200)
+
+    def cron_trending_streams(self):
+        duration = 60*60
+        streams = Stream.query().fetch()
+        freq = {}
+        now = datetime.datetime.now()
+        bound = now - datetime.timedelta(0, duration)
+        for s in streams:
+            c = s.view_records.filter(ViewRecord.date > bound).count()
+            cover_url = s.cover_url
+            if not cover_url:
+                cover_url = DEFAULT_STREAM_COVER_URL
+            freq[s.name] = (c, cover_url)
+        series = sorted(freq.items(), key=operator.itemgetter(1), reverse=True)
+        series=series[:3]
+        result=[]
+        for s in series:
+            element = {}
+            element['name']=s[0]
+            element['count']=s[1][0]
+            element['cover_url']=s[1][1]
+            result.append(element)
+
+        series=result
+        for user in User.query().fetch():
+            if user.getting_trendings:
+                if user.last_trending_sent + datetime.timedelta(0, user.trendings_interval) < now :
+                    email_body="<html><head><title>Trending Streams</title></head><body><h1>Trending Streams</h1><br/>"
+                    for s in series:
+                        email_body+='<a href="'+self.request.host_url+'/view_stream?stream_name='+\
+                            s['name']+'">'+s['name']+'</a><br/>'
+                    email_body+='</body></html>'
+
+                    mail.send_mail(sender='ali.moez.gholami@gmail.com', to=user.email,\
+                            subject="Trending Streams",body='', html=email_body)
+                    user.last_trending_sent = now
+                    user.put()
+        for ts in TrendingStream.query().fetch():
+            ts.key.delete()
+        for s in series:
+            ts = TrendingStream()
+            ts.name = s['name']
+            ts.cover_url = s['cover_url']
+            ts.count = s['count']
+            ts.put()
         self.response.set_status(200)
 
     def management(self):

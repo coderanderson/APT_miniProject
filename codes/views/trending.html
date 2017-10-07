@@ -12,47 +12,33 @@
             <div class="row"><h2>Top 3 Trending Streams</h2></div>
             <div class="row" id="photoGroup">
                 <div class="col-sm-9">
-                    <a href="#" class="photoBlocks">
+                {% for i in range(names|length) %}
+                    <a href="/view_stream?stream_name={{ names[i] }}&All=0" class="photoBlocks">
                         <figure>
-                          <img src="https://i.pinimg.com/736x/bc/f0/4e/bcf04eafebdf707b8d900f02e6d8bd70--photo-tag-touch-me.jpg" alt="">
-                          <p class="text">Text to overlay</p>
-                          <figcaption>1356 views</figcaption>
+                          <img src="{{covers[i]}}" alt="">
+                          <p class="text">{{names[i]}}</p>
+                          <figcaption>{{ counts[i] }} views</figcaption>
                           <figcaption>in past hour</figcaption>
                         </figure>
                     </a>
-                    <a href="#" class="photoBlocks" align="top">
-                        <figure>
-                          <img src="https://cdn-images-1.medium.com/max/1600/1*mONNI1lG9VuiqovpnYqicA.jpeg" alt="">
-                          <p class="text">Text to overlay</p>
-                          <figcaption>44 views</figcaption>
-                          <figcaption>in past hour</figcaption>
-                        </figure>
-                    </a>
-                    <a href="#" class="photoBlocks">
-                        <figure>
-                          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1200px-Cat03.jpg" alt="">
-                          <p class="text">Text to overlay</p>
-                          <figcaption>0 views</figcaption>
-                          <figcaption>in past hour</figcaption>
-                        </figure>
-                    </a>
+                {% endfor %}
                 </div>
                 <div class="col-sm-3">
-                    <form action="#" method="post">
+                    <form action="/update_trending_info" method="get">
                       <div class="checkbox">
-                        <label><input type="checkbox" value="">No reports</label>
+                        <label><input type="radio" name="interval" value="0">No reports</label>
                       </div>
                       <div class="checkbox">
-                        <label><input type="checkbox" value="">Every 5 minutes</label>
+                        <label><input type="radio" name="interval" value="300">Every 5 minutes</label>
                       </div>
                       <div class="checkbox">
-                        <label><input type="checkbox" value="">Every 1 hour</label>
+                        <label><input type="radio" name="interval" value="3600">Every 1 hour</label>
                       </div>
                       <div class="checkbox">
-                        <label><input type="checkbox" value="">Every day</label>
+                        <label><input type="radio" name="interval" value="86400">Every day</label>
                       </div>
                       <h5>Email trending report</h5>
-                      <button type="submit" class="btn btn-primary" value="#">Update rate</button>
+                      <button type="submit" class="btn btn-primary" >Update rate</button>
                     </form>
                 </div>
             </div>
