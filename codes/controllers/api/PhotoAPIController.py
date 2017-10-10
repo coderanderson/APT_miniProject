@@ -3,7 +3,9 @@ import urllib
 from codes.models import *
 from google.appengine.ext import ndb
 
+
 class PhotoAPIController(webapp2.RequestHandler):
+
     def create(self):
         self.response.headers['Content-Type'] = 'application/json'
 
@@ -13,9 +15,8 @@ class PhotoAPIController(webapp2.RequestHandler):
             self.response.set_status(400)
             self.response.out.write(json.dumps({'error': 'stream not found'}))
 
-        photo = Photo(stream = stream.key)
+        photo = Photo(stream=stream.key)
         photo_data = self.request.get('photo_data')
         photo.data = photo_data
         photo.put()
         self.response.set_status(200)
-

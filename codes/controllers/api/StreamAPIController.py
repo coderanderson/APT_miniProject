@@ -17,6 +17,7 @@ from google.appengine.api import urlfetch
 
 STREAM_INDEX = 'stream_index'
 
+
 class StreamAPIController(webapp2.RequestHandler):
 
     def create(self, from_view=False):
@@ -28,7 +29,7 @@ class StreamAPIController(webapp2.RequestHandler):
             stream = Stream.query().filter(Stream.name == stream_name).get()
 
             if stream:
-                result={ 'error': 'duplicate stream name' }
+                result = {'error': 'duplicate stream name'}
                 if not from_view:
                     self.response.set_status(409)
                     self.response.out.write(json.dumps(result))
@@ -48,16 +49,18 @@ class StreamAPIController(webapp2.RequestHandler):
                 stream.owner = user.key
                 stream.put()
 
-                invitee_emails = [ e.strip() for e in invitee_emails.split(',') if e.strip()!='' ]
+                invitee_emails = [
+                    e.strip() for e in invitee_emails.split(',') if e.strip() != '']
                 invitation_link = self.request.host_url + '/invite?stream_name=' + stream_name
                 email_body = codes.controllers.view.StreamViewController.\
-                        StreamViewController.JINJA_ENVIRONMENT.get_template('invitation.html')
-                email_body = email_body.render({'invitation_link': invitation_link,\
-                    'message': message, 'stream_name': stream_name})
+                    StreamViewController.JINJA_ENVIRONMENT.get_template(
+                        'invitation.html')
+                email_body = email_body.render({'invitation_link': invitation_link,
+                                                'message': message, 'stream_name': stream_name})
 
                 for e in invitee_emails:
-                    mail.send_mail(sender=gusers.get_current_user().email(), to=e,\
-                        subject="Stream Invitation",body='', html=email_body)
+                    mail.send_mail(sender=gusers.get_current_user().email(), to=e,
+                                   subject="Stream Invitation", body='', html=email_body)
 
                 if not from_view:
                     self.response.set_status(200)
@@ -82,11 +85,12 @@ class StreamAPIController(webapp2.RequestHandler):
             self.error(404)
             return
 
-        total_pages = int(math.ceil(stream.photos.count()*1.0/per_page))
-        photos = stream.photos.order(-Photo.creation_date).fetch(per_page, offset=per_page * (page - 1))
-        photo_urls = ['/get_photo?img_id='+p.key.urlsafe() for p in photos]
+        total_pages = int(math.ceil(stream.photos.count() * 1.0 / per_page))
+        photos = stream.photos.order(-Photo.creation_date).fetch(
+            per_page, offset=per_page * (page - 1))
+        photo_urls = ['/get_photo?img_id=' + p.key.urlsafe() for p in photos]
 
-        vr = ViewRecord(stream = stream.key)
+        vr = ViewRecord(stream=stream.key)
         vr.put()
 
         cover_url = stream.cover_url
@@ -95,12 +99,12 @@ class StreamAPIController(webapp2.RequestHandler):
 
         stream.put()
 
-        result = {'stream_name': stream_name,\
-                'cover_url': cover_url,\
-                'total_pages': total_pages,\
-                'page': page,\
-                'per_page': per_page,\
-                'photo_urls': photo_urls}
+        result = {'stream_name': stream_name,
+                  'cover_url': cover_url,
+                  'total_pages': total_pages,
+                  'page': page,
+                  'per_page': per_page,
+                  'photo_urls': photo_urls}
         self.response.set_status(200)
         self.response.out.write(json.dumps(result))
 
@@ -109,12 +113,13 @@ class StreamAPIController(webapp2.RequestHandler):
         query = self.request.get('query', '')
         streams = []
         if query:
-            streams = [ s for s in Stream.query().fetch() if (query in s.name or query in s.tags) ]
+            streams = [s for s in Stream.query().fetch() if (
+                query in s.name or query in s.tags)]
         else:
             streams = Stream.query().fetch()
         result = []
         for s in streams:
-            cover_url=s.cover_url
+            cover_url = s.cover_url
             if not cover_url:
                 cover_url = DEFAULT_STREAM_COVER_URL
             result.append({'name': s.name, 'cover_url': cover_url})
@@ -124,7 +129,7 @@ class StreamAPIController(webapp2.RequestHandler):
     def trending_streams(self):
         self.response.headers['Content-Type'] = 'application/json'
 
-        duration = int(self.request.get('duration', 60*60))
+        duration = int(self.request.get('duration', 60 * 60))
         streams = Stream.query().fetch()
         freq = {}
         bound = datetime.datetime.now() - datetime.timedelta(0, duration)
@@ -135,12 +140,12 @@ class StreamAPIController(webapp2.RequestHandler):
                 cover_url = DEFAULT_STREAM_COVER_URL
             freq[s.name] = (c, cover_url)
         series = sorted(freq.items(), key=operator.itemgetter(1), reverse=True)
-        result=[]
+        result = []
         for s in series:
             element = {}
-            element['name']=s[0]
-            element['count']=s[1][0]
-            element['cover_url']=s[1][1]
+            element['name'] = s[0]
+            element['count'] = s[1][0]
+            element['cover_url'] = s[1][1]
             result.append(element)
 
         self.response.out.write(json.dumps(result))
@@ -152,7 +157,7 @@ class StreamAPIController(webapp2.RequestHandler):
         self.response.set_status(200)
 
     def cron_trending_streams(self):
-        duration = 60*60
+        duration = 60 * 60
         streams = Stream.query().fetch()
         freq = {}
         now = datetime.datetime.now()
@@ -164,27 +169,27 @@ class StreamAPIController(webapp2.RequestHandler):
                 cover_url = DEFAULT_STREAM_COVER_URL
             freq[s.name] = (c, cover_url)
         series = sorted(freq.items(), key=operator.itemgetter(1), reverse=True)
-        series=series[:3]
-        result=[]
+        series = series[:3]
+        result = []
         for s in series:
             element = {}
-            element['name']=s[0]
-            element['count']=s[1][0]
-            element['cover_url']=s[1][1]
+            element['name'] = s[0]
+            element['count'] = s[1][0]
+            element['cover_url'] = s[1][1]
             result.append(element)
 
-        series=result
+        series = result
         for user in User.query().fetch():
             if user.getting_trendings:
-                if user.last_trending_sent + datetime.timedelta(0, user.trendings_interval) < now :
-                    email_body="<html><head><title>Trending Streams</title></head><body><h1>Trending Streams</h1><br/>"
+                if user.last_trending_sent + datetime.timedelta(0, user.trendings_interval) < now:
+                    email_body = "<html><head><title>Trending Streams</title></head><body><h1>Trending Streams</h1><br/>"
                     for s in series:
-                        email_body+='<a href="'+self.request.host_url+'/view_stream?stream_name='+\
-                            s['name']+'">'+s['name']+'</a><br/>'
-                    email_body+='</body></html>'
+                        email_body += '<a href="' + self.request.host_url + '/view_stream?stream_name=' +\
+                            s['name'] + '">' + s['name'] + '</a><br/>'
+                    email_body += '</body></html>'
 
-                    mail.send_mail(sender='anything@apt-s17-am79848.appspotmail.com', to=user.email,\
-                            subject="Trending Streams",body='', html=email_body)
+                    mail.send_mail(sender='anything@apt-s17-am79848.appspotmail.com', to=user.email,
+                                   subject="Trending Streams", body='', html=email_body)
                     user.last_trending_sent = now
                     user.put()
         for ts in TrendingStream.query().fetch():
@@ -199,31 +204,35 @@ class StreamAPIController(webapp2.RequestHandler):
 
     def management(self):
         self.response.headers['Content-Type'] = 'application/json'
+
         def get_stream_data(stream):
             name = stream.name
             number_of_photos = stream.photos.count()
             last_new_photo_date = ''
             if number_of_photos > 0:
-                last_new_photo_date = stream.photos.order(-Photo.creation_date).get().creation_date
+                last_new_photo_date = stream.photos.order(
+                    -Photo.creation_date).get().creation_date
                 last_new_photo_date = str(last_new_photo_date)
             else:
                 last_new_photo_date = time.strftime('%m/%d/%Y', time.gmtime(0))
 
-            return {'name':name, 'number_of_photos':number_of_photos,\
-                    'number_of_views':stream.view_records.count(), 'last_new_photo_date':last_new_photo_date}
+            return {'name': name, 'number_of_photos': number_of_photos,
+                    'number_of_views': stream.view_records.count(), 'last_new_photo_date': last_new_photo_date}
 
         if gusers.get_current_user():
             user = User.query().filter(User.email == gusers.get_current_user().email()).get()
-            owned_streams = [ get_stream_data(s) for s in user.owned_streams.fetch() ]
-            subscribed_streams = [ get_stream_data(k.get()) for k in user.subscription_list ]
+            owned_streams = [get_stream_data(s)
+                             for s in user.owned_streams.fetch()]
+            subscribed_streams = [get_stream_data(
+                k.get()) for k in user.subscription_list]
 
             self.response.headers['Content-Type'] = 'application/json'
-            self.response.out.write(json.dumps({ 'owned_streams': owned_streams,\
-                'subscribed_streams': subscribed_streams}))
+            self.response.out.write(json.dumps({'owned_streams': owned_streams,
+                                                'subscribed_streams': subscribed_streams}))
 
         else:
             self.response.set_status(403)
-            self.response.out.write(json.dumps({ 'error': 'not logged in' }))
+            self.response.out.write(json.dumps({'error': 'not logged in'}))
 
     def delete_selected_streams(self):
         remove_list = self.request.get('streams').split(',')
@@ -260,4 +269,4 @@ class StreamAPIController(webapp2.RequestHandler):
             self.response.set_status(200)
         else:
             self.response.set_status(403)
-            self.response.out.write(json.dumps({ 'error': 'not logged in' }))
+            self.response.out.write(json.dumps({'error': 'not logged in'}))

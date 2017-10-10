@@ -5,7 +5,9 @@ from codes.models import *
 
 STREAM_INDEX = 'stream_index'
 
+
 class UserViewController(webapp2.RequestHandler):
+
     @classmethod
     def get_login_info(cls, callee):
         self = callee
@@ -35,5 +37,6 @@ class UserViewController(webapp2.RequestHandler):
             'login_page': True
         }
         template_values.update(UserViewController.get_login_info(self))
-        template = UserViewController.JINJA_ENVIRONMENT.get_template('login.html')
+        template = UserViewController.JINJA_ENVIRONMENT.get_template(
+            'login.html')
         self.response.write(template.render(template_values))

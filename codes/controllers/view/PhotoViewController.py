@@ -3,7 +3,9 @@ import urllib
 from codes.models import *
 from google.appengine.ext import ndb
 
+
 class PhotoViewController(webapp2.RequestHandler):
+
     def view(self):
         try:
             photo_key = ndb.Key(urlsafe=self.request.get('img_id'))
@@ -17,7 +19,8 @@ class PhotoViewController(webapp2.RequestHandler):
             self.error(404)
 
     def show_upload_menu(self):
-        template = PhotoController.JINJA_ENVIRONMENT.get_template('upload_photo.html')
+        template = PhotoController.JINJA_ENVIRONMENT.get_template(
+            'upload_photo.html')
         self.response.write(template.render({}))
 
     def create(self):
@@ -27,11 +30,10 @@ class PhotoViewController(webapp2.RequestHandler):
             self.response.set_status(400)
             self.response.out.write(json.dumps({'error': 'stream not found'}))
 
-        photo = Photo(stream = stream.key)
+        photo = Photo(stream=stream.key)
         photo_data = self.request.get('photo_data')
         photo.data = photo_data
         photo.put()
         self.response.set_status(200)
-        query_params = {'stream_name': stream_name, 'All':1}
+        query_params = {'stream_name': stream_name, 'All': 1}
         self.redirect('/view_stream?' + urllib.urlencode(query_params))
-
