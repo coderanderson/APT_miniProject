@@ -20,7 +20,7 @@
                       <img src="{{ photo_urls[i] }}"></img>
                   {% endfor %}
                 {% endif %}
-                <a href="/view_stream?stream_name={{ stream_name }}&All=1" class="button next">More Pictures</a>
+                <a href="{{ view_route }}?stream_name={{ stream_name }}&All=1" class="button next">More Pictures</a>
               {% else %}
                 {% for i in range(photo_urls|length) %}
                     <img src="{{ photo_urls[i] }}"></img>
@@ -50,7 +50,7 @@
               </div>
           </form>
             <div class="row">
-                <a class="btn btn-primary" href="/invite?stream_name={{ stream_name }}">Subscribe</a>  
+                <a class="btn btn-primary" href="{{ invite_route }}?stream_name={{ stream_name }}">Subscribe</a>  
             </div>
         </div>
     </body>

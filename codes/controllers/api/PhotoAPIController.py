@@ -5,17 +5,15 @@ from google.appengine.ext import ndb
 
 class PhotoAPIController(webapp2.RequestHandler):
     def create(self):
-        self.response.headers['Content-Type'] = 'application/json'
-
         stream_name = self.request.get('stream_name', DEFAULT_STREAM_NAME)
-        stream = Stream.query().filter(Stream.name == stream_name).get()
-        if not stream:
-            self.response.set_status(400)
-            self.response.out.write(json.dumps({'error': 'stream not found'}))
-
-        photo = Photo(stream = stream.key)
         photo_data = self.request.get('photo_data')
-        photo.data = photo_data
-        photo.put()
-        self.response.set_status(200)
 
+        result = Photo.store(stream_name, photo_data)
+
+        self.response.headers['Content-Type'] = 'application/json'
+        if 'error' in result:
+            self.response.set_status(404)
+            self.response.out.write(json.dumps({'error': result['error']}))
+        else:
+            self.response.set_status(200)
+            self.response.out.write(json.dumps({}))

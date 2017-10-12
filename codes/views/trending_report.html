@@ -1,0 +1,13 @@
+<html>
+    <head>
+        <title>Trending Streams Report</title>
+    </head>
+    <body>
+        <h1>Trending Streams</h1>
+        <br/>
+        {% for n in names %}
+            <a href="{{ host }}{{ view_route }}?stream_name={{ n }}">{{ n }}</a>
+            <br/>
+        {% endfor %}
+    </body>
+</html>

@@ -6,6 +6,7 @@ from codes.models import *
 STREAM_INDEX = 'stream_index'
 
 class UserViewController(webapp2.RequestHandler):
+    login_error = 'you should login first'
     @classmethod
     def get_login_info(cls, callee):
         self = callee
