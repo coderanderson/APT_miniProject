@@ -1,7 +1,7 @@
 import codes
 from urlparse import urlparse
 from codes.controllers.view.StreamViewController import StreamViewController
-from google.appengine.api import mail
+from google.appengine.api import mail #TODO
 
 class Mailer():
     JINJA_ENVIRONMENT = ''

@@ -5,6 +5,7 @@ import config
 import codes
 from codes.controllers.view.StreamViewController import StreamViewController
 from codes.controllers.view.PhotoViewController import PhotoViewController
+from codes.controllers.view.PhotoViewController import PhotoUploadHandler
 from codes.controllers.view.UserViewController import UserViewController
 
 from codes.controllers.api.StreamAPIController import StreamAPIController
@@ -15,6 +16,7 @@ PhotoViewController.JINJA_ENVIRONMENT = config.JINJA_ENVIRONMENT
 UserViewController.JINJA_ENVIRONMENT = config.JINJA_ENVIRONMENT
 codes.mailers.Mailer.JINJA_ENVIRONMENT = config.JINJA_ENVIRONMENT
 
+#TODO: routes
 app = webapp2.WSGIApplication([
     webapp2.Route('/api/create_stream', StreamAPIController, handler_method='create',\
         methods=['POST']),
@@ -59,8 +61,7 @@ app = webapp2.WSGIApplication([
 
     webapp2.Route(PhotoViewController.view_route, PhotoViewController, handler_method='view',\
         methods=['GET']),
-    webapp2.Route('/send_photo', PhotoViewController, handler_method='create',\
-        methods=['POST']),
+    (PhotoUploadHandler.upload_raw_url, PhotoUploadHandler),
 
     webapp2.Route('/login', UserViewController, handler_method='front_page',\
         methods=['GET']),

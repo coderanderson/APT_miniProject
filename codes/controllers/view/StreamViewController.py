@@ -2,6 +2,7 @@ import webapp2
 import urllib
 import codes
 from codes.controllers.view.UserViewController import UserViewController
+from codes.controllers.view.PhotoViewController import PhotoUploadHandler
 from codes.models import *
 from google.appengine.api import users as gusers
 
@@ -36,9 +37,9 @@ class StreamViewController(webapp2.RequestHandler):
             self.response.write(template.render(result))
 
     def show_create_menu(self):
-        login_info = UserViewController.get_login_info(self)
+        template_values = UserViewController.get_login_info(self)
         template = StreamViewController.JINJA_ENVIRONMENT.get_template('create_stream.html')
-        self.response.write(template.render(login_info))
+        self.response.write(template.render(template_values))
 
     view_route = '/view_stream'
     def view(self):
@@ -54,6 +55,7 @@ class StreamViewController(webapp2.RequestHandler):
             self.error(404)
         else:
             result.update(UserViewController.get_login_info(self))
+            result['photo_upload_url'] = PhotoUploadHandler.upload_url
             template = StreamViewController.JINJA_ENVIRONMENT.get_template('stream.html')
             self.response.write(template.render(result))
         

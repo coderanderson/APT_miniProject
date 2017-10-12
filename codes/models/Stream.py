@@ -92,6 +92,7 @@ class Stream(ndb.Model):
     def all_streams_matching(cls, query):
         streams = []
         if query:
+            #TODO
             streams = [ s for s in Stream.query().fetch() if (query in s.name or (s.tags and query in s.tags)) ]
         else:
             streams = Stream.query().fetch()

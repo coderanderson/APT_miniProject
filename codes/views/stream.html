@@ -27,14 +27,14 @@
                 {% endfor %}
               {% endif %}
           </div>
-          <form action="/send_photo" method="post" enctype="multipart/form-data">
+          <form action="{{ photo_upload_url }}" method="post" enctype="multipart/form-data">
               <div class="row" id="uploadRow">
                   <div class="col-sm-6" id="fileUpload">
                       <!-- <input type="text" class="form-control" name="stream_name" placeholder="Stream Name"/> -->
                       <div class="row">
                           <div class="col-sm-2">
                               <span class="btn btn-success btn-file">
-                                  Browse... <input type="file" name="photo_data">
+                                  Browse... <input type="file" name="file">
                               </span>
                           </div>
                           <div class="col-sm-10">
