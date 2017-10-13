@@ -113,6 +113,7 @@ class Stream(ndb.Model):
 
     @classmethod
     def get_streams_matching_string(cls, query):
+        #TODO: any substring
         index = search.Index(STREAM_INDEX)
         documents = index.search(query)
         streams=[]
@@ -127,8 +128,6 @@ class Stream(ndb.Model):
     def all_streams_matching(cls, query):
         streams = []
         if query:
-            #TODO
-            # streams = [ s for s in Stream.query().fetch() if (query in s.name or (s.tags and query in s.tags)) ]
             streams = cls.get_streams_matching_string(query)
         else:
             streams = Stream.query().fetch()
