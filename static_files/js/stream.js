@@ -71,7 +71,7 @@ $(function() {
     min: (new Date().getTime() / 1000) - 31536000,
     max: (new Date().getTime() / 1000),
     step: 86400,
-    values: [ new Date('2017.01.01').getTime() / 1000, (new Date().getTime() / 1000)  ],
+    values: [ new Date('2017-01-01').getTime() / 1000, (new Date().getTime() / 1000)  ],
     slide: function( event, ui ) {
       $( "#amount" ).val( (new Date(ui.values[ 0 ] *1000).toDateString() ) + " - " + (new Date(ui.values[ 1 ] *1000)).toDateString() );
       date_min = ui.values[ 0 ] * 1000;
