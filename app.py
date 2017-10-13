@@ -14,6 +14,7 @@ from codes.controllers.api.PhotoAPIController import PhotoAPIController
 StreamViewController.JINJA_ENVIRONMENT = config.JINJA_ENVIRONMENT
 PhotoViewController.JINJA_ENVIRONMENT = config.JINJA_ENVIRONMENT
 UserViewController.JINJA_ENVIRONMENT = config.JINJA_ENVIRONMENT
+codes.mailers.Mailer.JINJA_ENVIRONMENT = config.JINJA_ENVIRONMENT
 
 app = webapp2.WSGIApplication([
     webapp2.Route('/api/create_stream', StreamAPIController, handler_method='create',\
