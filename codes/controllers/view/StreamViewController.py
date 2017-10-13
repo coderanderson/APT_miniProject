@@ -10,7 +10,7 @@ STREAM_INDEX = 'stream_index'
 
 class StreamViewController(webapp2.RequestHandler):
     def create(self):
-        login_info = UserViewController.get_login_info(self)
+        login_info = UserViewController.get_login_info(self, StreamViewController.create_menu_route)
 
         if gusers.get_current_user():
             stream_name = self.request.get('stream_name', DEFAULT_STREAM_NAME)
@@ -36,6 +36,7 @@ class StreamViewController(webapp2.RequestHandler):
             template = StreamViewController.JINJA_ENVIRONMENT.get_template('error.html')
             self.response.write(template.render(result))
 
+    create_menu_route='/create_stream_menu'
     def show_create_menu(self):
         template_values = UserViewController.get_login_info(self)
         template = StreamViewController.JINJA_ENVIRONMENT.get_template('create_stream.html')
@@ -63,6 +64,7 @@ class StreamViewController(webapp2.RequestHandler):
             template = StreamViewController.JINJA_ENVIRONMENT.get_template('stream.html')
             self.response.write(template.render(result))
         
+    view_all_route = '/view_all'
     def view_all(self):
         result = Stream.all_streams_matching('')
         covers = [o['cover_url'] for o in result]
@@ -80,7 +82,7 @@ class StreamViewController(webapp2.RequestHandler):
             self.redirect(StreamViewController.trendings_show_route)
         else:
             result = {'error': UserViewController.login_error}
-            result.update(UserViewController.get_login_info(self))
+            result.update(UserViewController.get_login_info(self, StreamViewController.trendings_show_route))
             template = StreamViewController.JINJA_ENVIRONMENT.get_template('error.html')
             self.response.write(template.render(result))
 
@@ -113,7 +115,7 @@ class StreamViewController(webapp2.RequestHandler):
             else:
                 self.error(404)
         else:
-            self.redirect(gusers.create_login_url('/'))
+            self.redirect(gusers.create_login_url(StreamViewController.view_all_route))
 
     def search_stream(self):
         query = self.request.get('search', '')

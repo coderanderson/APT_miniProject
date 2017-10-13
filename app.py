@@ -44,14 +44,14 @@ app = webapp2.WSGIApplication([
         methods=['GET']),
     webapp2.Route('/create_stream', StreamViewController, handler_method='create',\
         methods=['POST']),
-    webapp2.Route('/create_stream_menu', StreamViewController, handler_method='show_create_menu',\
-        methods=['GET']),
+    webapp2.Route(StreamViewController.create_menu_route, StreamViewController,\
+            handler_method='show_create_menu', methods=['GET']),
     webapp2.Route(StreamViewController.trendings_show_route, StreamViewController,\
             handler_method='show_trending_streams', methods=['GET']),
     webapp2.Route(StreamViewController.view_route, StreamViewController,\
             handler_method='view', methods=['GET']),
-    webapp2.Route('/view_all', StreamViewController, handler_method='view_all',\
-        methods=['GET']),
+    webapp2.Route(StreamViewController.view_all_route, StreamViewController,\
+            handler_method='view_all', methods=['GET']),
     webapp2.Route(StreamViewController.invite_route, StreamViewController,\
         handler_method='handle_invitation', methods=['GET']),
     webapp2.Route('/search', StreamViewController, handler_method='search_stream',\

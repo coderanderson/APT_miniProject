@@ -73,14 +73,14 @@ class StreamAPIController(webapp2.RequestHandler):
         self.response.out.write(json.dumps(result))
         self.response.set_status(200)
 
-    def run_cron(self): #TODO
+    def run_cron(self):
         some_url = self.request.host_url + '/api/cron_trending_streams'
         content = urllib2.urlopen(some_url).read()
         self.response.set_status(200)
 
     def cron_trending_streams(self):
         Stream.generate_trending_report(self.request.host_url,\
-                codes.controllers.view.PhotoViewController.PhotoViewController.view_route)
+                codes.controllers.view.StreamViewController.StreamViewController.view_route)
         self.response.set_status(200)
 
     def management(self):
