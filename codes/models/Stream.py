@@ -6,8 +6,12 @@ import operator
 
 import codes
 
+from google.appengine.api import search
+
 DEFAULT_STREAM_NAME = 'default_stream'
 DEFAULT_STREAM_COVER_URL = '/static_files/img/no_cover.png'
+
+STREAM_INDEX = 'stream_index'
 
 class Stream(ndb.Model):
     name = ndb.StringProperty(indexed=True)
@@ -54,6 +58,7 @@ class Stream(ndb.Model):
             user.put()
             stream.owner = user.key
             stream.put()
+            cls.add_stream_to_index(stream)
 
             codes.mailers.Mailer.send_invitation_emails(host, stream_name, message, current_user_email, invitee_emails)
             return {}
@@ -88,12 +93,43 @@ class Stream(ndb.Model):
                 'per_page': per_page,\
                 'photo_urls': photo_urls}
         return result
+
+    @classmethod
+    def add_stream_to_index(cls, stream):
+        document = search.Document(\
+            doc_id = stream.key.urlsafe(),\
+            fields = [\
+                search.TextField(name='name', value=stream.name),\
+                search.TextField(name='tags', value=stream.tags),\
+            ])
+        index = search.Index(STREAM_INDEX)
+        index.put(document)
+
+    @classmethod
+    def remove_stream_from_index(cls, stream):
+        index = search.Index(STREAM_INDEX)
+        document = index.get(stream.key.urlsafe())
+        index.delete([document.doc_id])
+
+    @classmethod
+    def get_streams_matching_string(cls, query):
+        index = search.Index(STREAM_INDEX)
+        documents = index.search(query)
+        streams=[]
+        for d in documents:
+            s_key = ndb.Key(urlsafe = d.doc_id)
+            s = s_key.get()
+            if s:
+                streams.append(s)
+        return streams
+
     @classmethod
     def all_streams_matching(cls, query):
         streams = []
         if query:
             #TODO
-            streams = [ s for s in Stream.query().fetch() if (query in s.name or (s.tags and query in s.tags)) ]
+            # streams = [ s for s in Stream.query().fetch() if (query in s.name or (s.tags and query in s.tags)) ]
+            streams = cls.get_streams_matching_string(query)
         else:
             streams = Stream.query().fetch()
         result = []
@@ -160,6 +196,7 @@ class Stream(ndb.Model):
                     u.subscription_list.remove(key)
                     u.put()
                 key.delete()
+            cls.remove_stream_from_index(stream)
         user = codes.models.User.query().filter(codes.models.User.email == user_email).get()
         for unname in unsubscribe_list:
             stream = Stream.query().filter(Stream.name == unname).get()

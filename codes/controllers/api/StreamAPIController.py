@@ -14,8 +14,6 @@ from google.appengine.api import urlfetch
 
 from codes.controllers.view.UserViewController import UserViewController
 
-STREAM_INDEX = 'stream_index'
-
 class StreamAPIController(webapp2.RequestHandler):
 
     def create(self, from_view=False):
