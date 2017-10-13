@@ -23,7 +23,7 @@ class UserViewController(webapp2.RequestHandler):
                 _user.last_trending_sent = datetime.datetime.now()
                 _user.put()
         else:
-            url = gusers.create_login_url(self.request.uri)
+            url = gusers.create_login_url('/manage')
             url_linktext = 'Login'
         result = {
             'signurl': url,
