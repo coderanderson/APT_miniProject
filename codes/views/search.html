@@ -2,14 +2,14 @@
     <head>
         <title>Streams Search</title>
         <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <link rel="stylesheet" href="/static_files/css/header.css">
-        <link rel="stylesheet" href="/static_files/css/search.css">
+        <!-- link rel="stylesheet" href="/static_files/css/header.css" -->
+        <!-- link rel="stylesheet" href="/static_files/css/search.css" -->
         <link rel="stylesheet" href="/static_files/css/allStreams.css">
-        <link rel="stylesheet" href="/static_files/css/Autocomplete.css">
+        <!-- link rel="stylesheet" href="/static_files/css/Autocomplete.css">
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
         <script src="//code.jquery.com/jquery-1.12.4.js"></script>
-        <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-        <script>
+        <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script -->
+        <!--script>
         $( function() {
           var cache = {};
           $( "#text-input" ).autocomplete({
@@ -28,29 +28,31 @@
       }
     });
   } );
-  </script>
+  </script-->
     </head>
     <body>
         <div class="container">
 
             {% include 'header.html' %}
-            <form class="form-group" action="/search" method="get">
+            <!--form class="form-group" action="/search" method="get">
                 <input type="text" class="form-control" name="search" value="{{query}}" id="text-input" style="width: 200px;">
                 <button type="submit" class="btn">Search</button>
-            </form>
+            </form-->
             {% if query %}
-                <p> {{ count }} results for {{ query }}</p>
-                <p>click on an image to view stream</p>
+                <div class="row">
+                <h2> {{ count }} results for {{ query }}</h2>
+                </div>
+                <div class="row">
+                <h4>click on an image to view stream</h4>
+                </div>
                 <div id="photoGroup">
                     {% for i in range(names|length) %}
-                    <div class="row">
                         <a href="/view_stream?stream_name={{names[i]}}" class="photoBlocks">
                             <figure>
-                                <img src="{{covers[i]}}" alt="">
+                                <img src="{{covers[i]}}" alt="Cinque Terre" class="img-thumbnail">
                                 <p class="text">{{names[i]}}</p>
                             </figure>
                         </a>
-                    </div>
                     {% endfor %}
                 </div>
             {% endif %}

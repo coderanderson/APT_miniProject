@@ -2,7 +2,6 @@
     <head>
       <title>All Streams</title>
       <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-      <link rel="stylesheet" href="/static_files/css/header.css">
       <link rel="stylesheet" href="/static_files/css/allStreams.css">
     </head>
     <body>
@@ -15,7 +14,7 @@
         {% for i in range(names|length) %}
             <a href="/view_stream?stream_name={{ names[i] }}&All=0" class="photoBlocks">
               <figure>
-                  <img src="{{covers[i]}}" alt="">
+                  <img src="{{covers[i]}}" alt="Cinque Terre" class="img-thumbnail">
                   <p class="text">{{names[i]}}</p>
               </figure>
             </a>
