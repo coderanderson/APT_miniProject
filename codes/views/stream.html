@@ -3,8 +3,8 @@
         <title>Photo Upload</title>
         <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <link rel="stylesheet" href="/static_files/css/stream.css">
-        <link rel="stylesheet" href="/static_files/css/header.css">
-        <!-- <link rel="stylesheet" href="/static_files/css/index.css"> -->
+        <link rel="stylesheet" href="/static_files/css/dropzone.css">
+        <script src="/static_files/js/dropzone.js"></script>
     </head>
     <body>
         <div class="container">
@@ -27,30 +27,21 @@
                 {% endfor %}
               {% endif %}
           </div>
-          <form action="{{ photo_upload_url }}" method="post" enctype="multipart/form-data">
-              <div class="row" id="uploadRow">
-                  <div class="col-sm-6" id="fileUpload">
-                      <!-- <input type="text" class="form-control" name="stream_name" placeholder="Stream Name"/> -->
-                      <div class="row">
+          <br/>
+          <form action="{{ photo_upload_url }}" class="dropzone" method="post"
+              id="photo_upload_form"
+              enctype="multipart/form-data" style="width:53.5%">
+                <div class="row">
                           <div class="col-sm-2">
-                              <span class="btn btn-success btn-file">
-                                  Browse... <input type="file" name="file">
-                              </span>
-                          </div>
-                          <div class="col-sm-10">
-                              <textarea class="form-control" 
-                                        placeholder="Comments" 
-                                        rows="1"></textarea>
+                               <div class="fallback">
+                                   <input type="file" name="file" multiple>
+                               </div>
                           </div>
                           <input type="hidden" name="stream_name" value="{{ stream_name }}"/>
-                      </div>
-                      <br/>
-                      <button type="submit" class="btn btn-primary" value="Create">Upload file</button>
-                  </div>
-              </div>
+                </div>
           </form>
             <div class="row">
-                <a class="btn btn-primary" href="{{ invite_route }}?stream_name={{ stream_name }}">Subscribe</a>  
+                <a class="btn btn-primary" href="{{ invite_route }}?stream_name={{ stream_name }}">Subscribe</a>
             </div>
         </div>
     </body>

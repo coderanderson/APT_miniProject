@@ -3,7 +3,6 @@
         <title>ERROR</title>
         <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <link rel="stylesheet" href="/static_files/css/error.css">
-        <link rel="stylesheet" href="/static_files/css/header.css">
         <!-- <link rel="stylesheet" href="/static_files/css/index.css"> -->
     </head>
     <body>
@@ -11,7 +10,10 @@
             {% include 'header.html' %}
             <div class="row" id="area">
                 <div class="col-sm-2">
-                    <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+                    <span class="glyphicon glyphicon-warning-sign" aria-hidden="true" style="font-size: 80px;
+    display: inline-block;
+    vertical-align: middle;
+    padding-top: 10px;"></span>
                 </div>
                 <div class="col-sm-6">
                     <span>{{ error }}</span>

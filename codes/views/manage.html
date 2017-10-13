@@ -4,57 +4,64 @@
         <!-- <link type="text/css" rel="stylesheet" href="../css/bootstrap.css">
         <link type="text/css" rel="stylesheet" href="../css/bootstrap-responsive.css"> -->
         <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <link rel="stylesheet" href="/static_files/css/header.css">
         <link rel="stylesheet" href="/static_files/css/management.css">
+        <!-- link rel="stylesheet" href="/static_files/css/Autocomplete.css" -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     </head>
     <body>
         <div class="container">
             {% include 'header.html' %}
+
             <div class="row">
                 <h2>Streams I own</h2>
             </div>
             <div class="row">
-                <table id="owned_streams">
+                <table id="owned_streams" class="table table-hover">
+                    <thead>
                     <tr align="right">
-                        <th>
+                        <th width="20%">
                             <span class="sortButtonText">Name</span>
-                            <a href="#" class="sortButton">&#9650</a>
+                            <a href="#" class="sortButton" id="ownNameButton">&#9650</a>
                         </th>
-                        <th>Last New Picture</th>
-                        <th>
+                        <th width="35%">Last New Picture</th>
+                        <th width="25%">
                             <span class="sortButtonText">Number of Pictures</span>
-                            <a href="#" class="sortButton">&#9650</a>
+                            <a href="#" class="sortButton" id="ownPictureButton">&#9650</a>
                         </th>
                         <th class="rightBoundry">Delete</th>
                     </tr>
+                    </thead>
                 </table>
                 <button class="btn btn-danger" value="Create" id="delete_btn">
                     <i class="glyphicon glyphicon-remove-sign"></i>
                     Delete Checked Streams
                 </button>
             </div>
+            <br/>
+            <br/>
             <div class="row">
                 <h2>Streams I subscribe to</h2>
             </div>
             <div class="row">
-                <table id="subscribed_streams">
+                <table id="subscribed_streams" class="table table-hover">
+                    <thead>
                     <tr align="right">
-                        <th>
+                        <th width="20%">
                             <span class="sortButtonText">Name</span>
-                            <a href="#" class="sortButton">&#9650</a>
+                            <a href="#" class="sortButton" id="subscribeNameButton">&#9650</a>
                         </th>
-                        <th>Last New Picture</th>
-                        <th>
+                        <th width="35%">Last New Picture</th>
+                        <th width="25%">
                             <span class="sortButtonText">Number of Pictures</span>
-                            <a href="#" class="sortButton">&#9650</a>
+                            <a href="#" class="sortButton" id="subscribeNumberButton">&#9650</a>
                         </th>
-                        <th>
+                        <th width="10%">
                             <span class="sortButtonText">Views</span>
-                            <a href="#" class="sortButton">&#9650</a>
+                            <a href="#" class="sortButton" id="subscribeViewButton">&#9650</a>
                         </th>
                         <th class="rightBoundry">Unsubscribe</th>
                     </tr>
+                    </thead>
                 </table>
                 <button class="btn btn-danger" value="Create" id="unsubscribe_btn">
                     <i class="glyphicon glyphicon-remove-sign"></i>

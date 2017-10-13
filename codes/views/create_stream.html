@@ -1,11 +1,8 @@
 <html>
     <head>
       <title>Create Stream</title>
-      <!-- <link type="text/css" rel="stylesheet" href="../css/bootstrap.css">
-      <link type="text/css" rel="stylesheet" href="../css/bootstrap-responsive.css"> -->
       <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-      <link rel="stylesheet" href="/static_files/css/index.css">
-      <link rel="stylesheet" href="/static_files/css/header.css">
+      <!-- link rel="stylesheet" href="/static_files/css/index.css"-->
     </head>
     <body>
         <div class="container">
@@ -14,6 +11,7 @@
             <form action="/create_stream" method="post" id="create_form">
               <div class="row">
                 <div class="col-sm-6">
+                  <br/>
                   <div class="form-group">
                     <label for="nameOfStream">Name your stream</label>
                     <input type="text" 
@@ -22,16 +20,19 @@
                            name="stream_name"
                     >
                   </div>
+                  <br/>
                   <div class="form-group">
                     <label for="subscribers">Add Subscribers</label>
                     <textarea class="form-control" placeholder="abc@abc.com" rows="5" form="create_form" name="invitee_emails"></textarea>
                   </div>
+                  <br/>
                   <div class="form-group">
                     <textarea class="form-control" form="create_form"
                               placeholder="Optional message for invite" 
                               rows="3" name="message"></textarea>
                   </div>
                 </div>
+                <br/>
                 <div class="col-sm-6">
                   <div class="form-group">
                     <label for="tags">Tag your stream</label>
@@ -39,6 +40,7 @@
                               placeholder="#AdnanFriends, #FB, #1985" name="tags"
                               rows="3"></textarea>
                   </div>
+                  <br/>
                   <div class="form-group">
                     <label for="coverImage">URL to cover image</label>
                     <textarea class="form-control" form="create_form" name="cover_url"

@@ -1,12 +1,12 @@
 import webapp2
 import urllib
+import json
 import codes
 from codes.controllers.view.UserViewController import UserViewController
 from codes.controllers.view.PhotoViewController import PhotoUploadHandler
 from codes.models import *
 from google.appengine.api import users as gusers
 
-STREAM_INDEX = 'stream_index'
 
 class StreamViewController(webapp2.RequestHandler):
     def create(self):
@@ -128,6 +128,25 @@ class StreamViewController(webapp2.RequestHandler):
         template_values.update(UserViewController.get_login_info(self))
         template = StreamViewController.JINJA_ENVIRONMENT.get_template('search.html')
         self.response.write(template.render(template_values))
+    
+    def search_suggest(self):
+    	from webapp2_extras import json
+        query = self.request.get("term")
+        if query:
+            streams = [s for s in Stream.query().fetch() if (
+                query in s.name or query in s.tags)]
+        else:
+            streams = []
+
+        result = []
+        count = 0
+        for s in streams:
+            result.append(str(s.name))
+            count = count + 1
+            if count >= 20:
+            	break
+        #self.response.content_type("application/json")
+        self.response.write(json.encode(result))
 
     def show_manage_menu(self):
         template_values = {}

@@ -190,6 +190,7 @@ class Stream(ndb.Model):
             if not stream:
                 continue
             key = stream.key
+            # TODO: remove all images not only subscribers
             if stream.owner.get().email == user_email:
                 for u in stream.members.fetch():
                     u.subscription_list.remove(key)

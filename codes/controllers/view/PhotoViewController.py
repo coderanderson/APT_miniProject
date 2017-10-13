@@ -1,5 +1,6 @@
 import webapp2
 import urllib
+import json
 from codes.models import *
 from google.appengine.ext import ndb
 from google.appengine.ext.webapp import blobstore_handlers
@@ -29,12 +30,20 @@ class PhotoUploadHandler(blobstore_handlers.BlobstoreUploadHandler):
     upload_raw_url = '/send_photo'
     upload_url = blobstore.create_upload_url(upload_raw_url)
     def post(self):
-        stream_name = self.request.get('stream_name', DEFAULT_STREAM_NAME)
 
+        stream_name = self.request.get('stream_name', DEFAULT_STREAM_NAME)
         result = Photo.store(stream_name, self.get_uploads())
+
+        # generate new upload url
+        # There is a minor bug when two people get same stream and one uploads first, the second one
+        # needs to refresh page or his/her first upload fails RACE CONDITION
+        PhotoUploadHandler.upload_url = blobstore.create_upload_url(PhotoUploadHandler.upload_raw_url)
+        self.response.headers['Content-Type'] = 'application/json'
+
         if 'error' in result:
             self.response.set_status(404)
             self.response.out.write(json.dumps({'error': result['error']}))
         else:
-            query_params = {'stream_name': stream_name, 'All':0}
-            self.redirect('/view_stream?' + urllib.urlencode(query_params))
+            self.response.out.write(json.dumps({'description': 'send the request to the new_url',\
+                'new_url': PhotoUploadHandler.upload_url}))
+

@@ -13,6 +13,7 @@ div#photoGroup {
 
 .checkbox {
 	font-size: 15px;
+  margin-left: -22px;
 }
 
 a.photoBlocks {

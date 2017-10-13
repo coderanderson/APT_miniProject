@@ -14,9 +14,7 @@ from codes.controllers.api.PhotoAPIController import PhotoAPIController
 StreamViewController.JINJA_ENVIRONMENT = config.JINJA_ENVIRONMENT
 PhotoViewController.JINJA_ENVIRONMENT = config.JINJA_ENVIRONMENT
 UserViewController.JINJA_ENVIRONMENT = config.JINJA_ENVIRONMENT
-codes.mailers.Mailer.JINJA_ENVIRONMENT = config.JINJA_ENVIRONMENT
 
-#TODO: routes
 app = webapp2.WSGIApplication([
     webapp2.Route('/api/create_stream', StreamAPIController, handler_method='create',\
         methods=['POST']),
@@ -55,6 +53,8 @@ app = webapp2.WSGIApplication([
     webapp2.Route(StreamViewController.invite_route, StreamViewController,\
         handler_method='handle_invitation', methods=['GET']),
     webapp2.Route('/search', StreamViewController, handler_method='search_stream',\
+        methods=['GET']),
+    webapp2.Route('/search_suggest', StreamViewController, handler_method='search_suggest',
         methods=['GET']),
     webapp2.Route('/update_trending_info', StreamViewController, handler_method='update_trending_preferences',\
         methods=['GET']),
