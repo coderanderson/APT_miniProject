@@ -16,10 +16,6 @@ class PhotoViewController(webapp2.RequestHandler):
         except:
             self.error(404)
 
-    def show_upload_menu(self):
-        template = PhotoController.JINJA_ENVIRONMENT.get_template('upload_photo.html')
-        self.response.write(template.render({}))
-
     def create(self):
         stream_name = self.request.get('stream_name', DEFAULT_STREAM_NAME)
         stream = Stream.query().filter(Stream.name == stream_name).get()

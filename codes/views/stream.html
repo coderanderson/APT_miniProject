@@ -1,14 +1,35 @@
 <html>
     <head>
         <title>Photo Upload</title>
+        <style>
+          #map {
+            height: 75%
+          }
+        </style>
         <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <link rel="stylesheet" href="/static_files/css/stream.css">
         <link rel="stylesheet" href="/static_files/css/header.css">
         <!-- <link rel="stylesheet" href="/static_files/css/index.css"> -->
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     </head>
     <body>
         <div class="container">
           {% include 'header.html' %}
+          <div id="map"></div>
+          <!-- Replace the value of the key parameter with your own API key. -->
+          <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+          </script>
+          <script async defer
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCy4sTSEo-D6AtHEwei75wag3a9MPabkbA&callback=initMap">
+          </script>
+          <p>
+            <label for="amount">Date range:</label>
+            <input type="text" id="amount" style="border: 0; color: #f6931f; font-weight: bold;" size="100"/>
+          </p>
+           
+          <div id="slider-range"></div>
           <div class="row">
               {% if All==0 %}
                 {% if photo_urls|length > 3 %}
@@ -30,7 +51,6 @@
           <form action="/send_photo" method="post" enctype="multipart/form-data">
               <div class="row" id="uploadRow">
                   <div class="col-sm-6" id="fileUpload">
-                      <!-- <input type="text" class="form-control" name="stream_name" placeholder="Stream Name"/> -->
                       <div class="row">
                           <div class="col-sm-2">
                               <span class="btn btn-success btn-file">
@@ -49,9 +69,20 @@
                   </div>
               </div>
           </form>
-            <div class="row">
-                <a class="btn btn-primary" href="/invite?stream_name={{ stream_name }}">Subscribe</a>  
-            </div>
+          <div class="row">
+              <a class="btn btn-primary" href="/invite?stream_name={{ stream_name }}">Subscribe</a>  
+          </div>
         </div>
+        <script>
+          var photos = new Array();
+          {% for photo_url in photo_urls %}
+             photos.push("{{ photo_url|safe }}");
+          {% endfor %}
+          var dates = new Array();
+          {% for photo_date in photo_dates %}
+             dates.push("{{ photo_date }}");
+          {% endfor %}
+        </script>
+        <script src="/static_files/js/stream.js"></script>
     </body>
 </html>

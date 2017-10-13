@@ -104,6 +104,7 @@ class StreamViewController(webapp2.RequestHandler):
         total_pages = int(math.ceil(stream.photos.count()*1.0/per_page))
         photos = stream.photos.order(-Photo.creation_date).fetch(per_page, offset=per_page * (page - 1))
         photo_urls = ['/get_photo?img_id='+p.key.urlsafe() for p in photos]
+        photo_dates = [p.creation_date for p in photos];
 
         vr = ViewRecord(stream = stream.key)
         vr.put()
@@ -134,7 +135,8 @@ class StreamViewController(webapp2.RequestHandler):
                 'total_pages': total_pages,\
                 'page': page,\
                 'per_page': per_page,\
-                'photo_urls': photo_urls}
+                'photo_urls': photo_urls,\
+                'photo_dates': photo_dates}
         template = StreamViewController.JINJA_ENVIRONMENT.get_template('stream.html')
         self.response.write(template.render(result))
         
