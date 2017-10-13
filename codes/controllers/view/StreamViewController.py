@@ -130,23 +130,32 @@ class StreamViewController(webapp2.RequestHandler):
         self.response.write(template.render(template_values))
     
     def search_suggest(self):
-    	from webapp2_extras import json
-        query = self.request.get("term")
-        if query:
-            streams = [s for s in Stream.query().fetch() if (
-                query in s.name or query in s.tags)]
-        else:
-            streams = []
+        MAX_RESULT = 20
+        STRATEGY_NUMBER = 3
+        def search_strategy1(query):
+            streams = Stream.all_streams_matching(query)[:MAX_RESULT]
+            return [s['name'] for s in streams]
 
-        result = []
-        count = 0
-        for s in streams:
-            result.append(str(s.name))
-            count = count + 1
-            if count >= 20:
-            	break
-        #self.response.content_type("application/json")
-        self.response.write(json.encode(result))
+        def search_strategy2(query):
+            streams = Stream.gql("WHERE name >= :1 AND name < :2", query, query + u"\ufffd").fetch(MAX_RESULT)
+            return [s.name for s in streams]
+
+        def search_strategy3(query):
+            query = query.lower()
+            return [s.name for s in Stream.query().fetch() if query in s.name.lower()][:MAX_RESULT]
+
+        query = self.request.get("term")
+        streams = []
+        if query:
+            if STRATEGY_NUMBER is 1:
+                streams = search_strategy1(query)
+            elif STRATEGY_NUMBER is 1:
+                streams = search_strategy2(query)
+            else:
+                streams = search_strategy3(query)
+        streams.sort(key=lambda v: v.lower)
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps(streams))
 
     def show_manage_menu(self):
         template_values = {}

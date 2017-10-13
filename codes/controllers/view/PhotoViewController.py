@@ -37,6 +37,7 @@ class PhotoUploadHandler(blobstore_handlers.BlobstoreUploadHandler):
         # generate new upload url
         # There is a minor bug when two people get same stream and one uploads first, the second one
         # needs to refresh page or his/her first upload fails RACE CONDITION
+        # TODO: resolve bug
         PhotoUploadHandler.upload_url = blobstore.create_upload_url(PhotoUploadHandler.upload_raw_url)
         self.response.headers['Content-Type'] = 'application/json'
 

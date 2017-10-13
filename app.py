@@ -16,6 +16,7 @@ PhotoViewController.JINJA_ENVIRONMENT = config.JINJA_ENVIRONMENT
 UserViewController.JINJA_ENVIRONMENT = config.JINJA_ENVIRONMENT
 codes.mailers.Mailer.JINJA_ENVIRONMENT = config.JINJA_ENVIRONMENT
 
+# TODO: refactor routes
 app = webapp2.WSGIApplication([
     webapp2.Route('/api/create_stream', StreamAPIController, handler_method='create',\
         methods=['POST']),

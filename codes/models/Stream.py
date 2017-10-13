@@ -113,7 +113,6 @@ class Stream(ndb.Model):
 
     @classmethod
     def get_streams_matching_string(cls, query):
-        #TODO: any substring
         index = search.Index(STREAM_INDEX)
         documents = index.search(query)
         streams=[]
