@@ -131,6 +131,7 @@ class Stream(ndb.Model):
         series = Stream.get_top_trending_streams_now(duration)[:3]
         stream_names = [ s['name'] for s in series ]
         recipients = []
+        now = datetime.datetime.now()
         for user in codes.models.User.query().fetch():
             if user.getting_trendings:
                 if user.last_trending_sent + datetime.timedelta(0, user.trendings_interval) < now :
@@ -208,6 +209,7 @@ class TrendingStream(ndb.Model):
     @classmethod
     def get_current_trending_streams(cls, user_email):
         streams = TrendingStream.query().fetch()
+        streams.sort(key=lambda x: x.count, reverse=True)
         (covers, names, counts)  = ([],[],[])
         for s in streams:
             cover_url=s.cover_url

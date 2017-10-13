@@ -49,11 +49,15 @@ class StreamViewController(webapp2.RequestHandler):
         All = int(self.request.get('All', '0'))
 
         result = Stream.view(stream_name, page, per_page, All==1)
-        result.update({ 'invite_route': StreamViewController.invite_route, 'view_route': StreamViewController.view_route })
-        result['All'] = All
         if not result:
             self.error(404)
+            template_values = UserViewController.get_login_info(self)
+            template_values['error']='stream not found'
+            template = StreamViewController.JINJA_ENVIRONMENT.get_template('error.html')
+            self.response.write(template.render(template_values))
         else:
+            result.update({'invite_route':StreamViewController.invite_route,'view_route':StreamViewController.view_route })
+            result['All'] = All
             result.update(UserViewController.get_login_info(self))
             result['photo_upload_url'] = PhotoUploadHandler.upload_url
             template = StreamViewController.JINJA_ENVIRONMENT.get_template('stream.html')
@@ -94,6 +98,7 @@ class StreamViewController(webapp2.RequestHandler):
     def create_invitation_link(cls, host, stream_name):
         query_params = {'stream_name': stream_name}
         invitation_link = host + cls.invite_route + '?' + urllib.urlencode(query_params)
+        return invitation_link
 
     invite_route = '/invite'
     manage_route = '/manage'
