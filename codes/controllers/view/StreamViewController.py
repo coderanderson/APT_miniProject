@@ -3,6 +3,7 @@ import urllib
 import codes
 import math
 import datetime
+import json
 from codes.models import *
 from codes.controllers.view.UserViewController import UserViewController
 from google.appengine.ext import ndb
@@ -301,6 +302,25 @@ class StreamViewController(webapp2.RequestHandler):
         template = StreamViewController.JINJA_ENVIRONMENT.get_template(
             'search.html')
         self.response.write(template.render(template_values))
+    
+    def search_suggest(self):
+    	from webapp2_extras import json
+        query = self.request.get("term")
+        if query:
+            streams = [s for s in Stream.query().fetch() if (
+                query in s.name or query in s.tags)]
+        else:
+            streams = []
+
+        result = []
+        count = 0
+        for s in streams:
+            result.append(str(s.name))
+            count = count + 1
+            if count >= 20:
+            	break
+        #self.response.content_type("application/json")
+        self.response.write(json.encode(result))
 
     def show_manage_menu(self):
         template_values = {}

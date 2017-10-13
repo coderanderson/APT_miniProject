@@ -5,12 +5,37 @@
         <link rel="stylesheet" href="/static_files/css/header.css">
         <link rel="stylesheet" href="/static_files/css/search.css">
         <link rel="stylesheet" href="/static_files/css/allStreams.css">
+        <link rel="stylesheet" href="/static_files/css/Autocomplete.css">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+        <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script>
+        $( function() {
+          var cache = {};
+          $( "#text-input" ).autocomplete({
+            minLength: 1,
+            source: function( request, response ) {
+              var term = request.term;
+              if ( term in cache ) {
+                response( cache[ term ] );
+                return;
+          }
+ 
+          $.getJSON( "/search_suggest", request, function( data, status, xhr ) {
+            cache[ term ] = data;
+            response( data );
+        });
+      }
+    });
+  } );
+  </script>
     </head>
     <body>
         <div class="container">
+
             {% include 'header.html' %}
             <form class="form-group" action="/search" method="get">
-                <input type="text" class="form-control" name="search" value="{{query}}">
+                <input type="text" class="form-control" name="search" value="{{query}}" id="text-input" style="width: 200px;">
                 <button type="submit" class="btn">Search</button>
             </form>
             {% if query %}

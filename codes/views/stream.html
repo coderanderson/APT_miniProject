@@ -4,6 +4,8 @@
         <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <link rel="stylesheet" href="/static_files/css/stream.css">
         <link rel="stylesheet" href="/static_files/css/header.css">
+        <link rel="stylesheet" href="/static_files/css/dropzone.css">  
+        <script src="/static_files/js/dropzone.js"></script>
         <!-- <link rel="stylesheet" href="/static_files/css/index.css"> -->
     </head>
     <body>
@@ -27,28 +29,24 @@
                 {% endfor %}
               {% endif %}
           </div>
-          <form action="/send_photo" method="post" enctype="multipart/form-data">
-              <div class="row" id="uploadRow">
-                  <div class="col-sm-6" id="fileUpload">
-                      <!-- <input type="text" class="form-control" name="stream_name" placeholder="Stream Name"/> -->
-                      <div class="row">
+          <br/>
+          <form action="/send_photo" class="dropzone" method="post" enctype="multipart/form-data" style="width:53.5%">
+                <div class="row">
                           <div class="col-sm-2">
-                              <span class="btn btn-success btn-file">
-                                  Browse... <input type="file" name="photo_data">
-                              </span>
-                          </div>
-                          <div class="col-sm-10">
-                              <textarea class="form-control" 
-                                        placeholder="Comments" 
-                                        rows="1"></textarea>
+                               <div class="fallback">
+                                   <input type="file" name="photo_data" multiple>
+                               </div>
                           </div>
                           <input type="hidden" name="stream_name" value="{{ stream_name }}"/>
-                      </div>
-                      <br/>
-                      <button type="submit" class="btn btn-primary" value="Create">Upload file</button>
-                  </div>
-              </div>
+                </div>
           </form>
+            <!-- div class="row">
+                <button type="submit" class="btn btn-md btn-success" value="Create">Add Files</button>
+                <button type="submit" class="btn btn-md btn-info">Start Uploading</button>
+                <button type="submit" class="btn btn-md btn-danger">Cancel Upload</button>
+                <button type="submit" class="btn btn-md btn-inverse">Delete</button>
+            </div-->
+            <br/>
             <div class="row">
                 <a class="btn btn-primary" href="/invite?stream_name={{ stream_name }}">Subscribe</a>  
             </div>

@@ -1,7 +1,9 @@
 <div class="row" id="header">
+
   {% if not login_page %}
     <h1 class="display-3">Connex.us</h1>
   {% endif %}
+
   <nav class="navbar transparent navbar-default">
     <div class="container-fluid">
       <ul class="nav navbar-nav">
@@ -12,7 +14,37 @@
         <li class="seperateLineInclude"><a href="/trending">Trending</a></li>
         <li class="seperateLineInclude"><a href="#">Social</a></li>
         <li class="seperateLineInclude"><a href="{{ signurl|safe }}">{{ signtext }}</a></li>
+        <li class="seperateLineInclude">            
+        <form class="form-group" action="/search" method="get">
+                <input type="text" name="search" value="{{query}}" id="text-nav" style="width: 200px;">
+                <button type="submit" class="btn">Search</button>
+            </form>
+        </li>
       </ul>
     </div>
   </nav>
-</div>
+
+        <link rel="stylesheet" href="/static_files/css/Autocomplete.css">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+        <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script>
+        $( function() {
+          var cache = {};
+          $( "#text-nav" ).autocomplete({
+            minLength: 1,
+            source: function( request, response ) {
+              var term = request.term;
+              if ( term in cache ) {
+                response( cache[ term ] );
+                return;
+          }
+ 
+          $.getJSON( "/search_suggest", request, function( data, status, xhr ) {
+            cache[ term ] = data;
+            response( data );
+        });
+      }
+    });
+  } );
+  </script>

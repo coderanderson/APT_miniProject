@@ -50,6 +50,10 @@ app = webapp2.WSGIApplication([
                   methods=['GET']),
     webapp2.Route('/search', StreamViewController, handler_method='search_stream',
                   methods=['GET']),
+
+    webapp2.Route('/search_suggest', StreamViewController, handler_method='search_suggest',
+                  methods=['GET']),
+
     webapp2.Route('/update_trending_info', StreamViewController, handler_method='update_trending_info',
                   methods=['GET']),
     webapp2.Route('/get_photo', PhotoViewController, handler_method='view',
