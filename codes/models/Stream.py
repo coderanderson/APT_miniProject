@@ -222,8 +222,8 @@ class Stream(ndb.Model):
                     'number_of_views':stream.view_records.count(), 'last_new_photo_date':last_new_photo_date}
 
         user = codes.models.User.query().filter(codes.models.User.email == user_email).get()
-        owned_streams = [ get_stream_data(s) for s in user.owned_streams.fetch() ]
-        subscribed_streams = [ get_stream_data(k.get()) for k in user.subscription_list ]
+        owned_streams = [ get_stream_data(s) for s in user.owned_streams.fetch() if s]
+        subscribed_streams = [ get_stream_data(k.get()) for k in user.subscription_list if s]
 
         return { 'owned_streams': owned_streams, 'subscribed_streams': subscribed_streams }
 

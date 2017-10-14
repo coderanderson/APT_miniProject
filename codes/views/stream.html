@@ -51,11 +51,15 @@
                 <div class="col-xs-9">
                 {% if photo_urls|length > 3 %}
                   {% for i in range(3) %}
-                      <img src="{{ photo_urls[i] }}"></img>
+                      <a href="{{ photo_urls[i] }}" target="_blank">
+                        <img src="{{ photo_urls[i] }}"></img>
+                      </a>
                   {% endfor %}
                 {% else %}
                   {% for i in range(photo_urls|length) %}
-                      <img src="{{ photo_urls[i] }}"></img>
+                      <a href="{{ photo_urls[i] }}" target="_blank">
+                        <img src="{{ photo_urls[i] }}"></img>
+                      </a>
                   {% endfor %}
                 {% endif %}
                 </div>
@@ -69,7 +73,9 @@
                 </div>
               {% else %}
                 {% for i in range(photo_urls|length) %}
-                    <img src="{{ photo_urls[i] }}"></img>
+                    <a href="{{ photo_urls[i] }}" target="_blank">
+                      <img src="{{ photo_urls[i] }}"></img>
+                    </a>
                 {% endfor %}
               {% endif %}
           </div>
