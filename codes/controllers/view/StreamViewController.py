@@ -151,11 +151,11 @@ class StreamViewController(webapp2.RequestHandler):
         if query:
             if STRATEGY_NUMBER is 1:
                 streams = search_strategy1(query)
-            elif STRATEGY_NUMBER is 1:
+            elif STRATEGY_NUMBER is 2:
                 streams = search_strategy2(query)
             else:
                 streams = search_strategy3(query)
-        streams.sort(key=lambda v: v.lower)
+        streams.sort(key=lambda v: v.lower())
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(streams))
 
