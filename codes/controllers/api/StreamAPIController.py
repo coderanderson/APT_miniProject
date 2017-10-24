@@ -50,7 +50,8 @@ class StreamAPIController(webapp2.RequestHandler):
         result = Stream.view(stream_name, page, per_page)
         if result:
             self.response.set_status(200)
-            self.response.out.write(json.dumps(result))
+            self.response.out.write(json.dumps(result,\
+                default = lambda d: d.isoformat() if hasattr(d, 'isoformat') else d ))
         else:
             self.error(404)
 
