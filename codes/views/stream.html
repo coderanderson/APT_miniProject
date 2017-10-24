@@ -13,6 +13,7 @@
         <script src="/static_files/js/dropzone.js"></script>
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script src="/static_files/js/location.js"></script>
     </head>
     <body>
         <div class="container">
@@ -46,6 +47,7 @@
             {% for photo_date in photo_dates %}
                dates.push("{{ photo_date }}");
             {% endfor %}
+
           </script>
           <script src="/static_files/js/stream.js"></script>
           {% else %}
@@ -94,6 +96,8 @@
                                </div>
                           </div>
                           <input type="hidden" name="stream_name" value="{{ stream_name }}"/>
+                          <input type="hidden" id="lat_container" name="lat" value="0"/>
+                          <input type="hidden" id="lon_container" name="lon" value="0"/>
                 </div>
           </form>
             <div class="row">

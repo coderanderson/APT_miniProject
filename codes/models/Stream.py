@@ -65,7 +65,7 @@ class Stream(ndb.Model):
             return {}
 
     @classmethod
-    def view(cls, stream_name, page, per_page, All=False):
+    def view(cls, stream_name, page, per_page, All=False, host_url=''):
         stream = Stream.query().filter(Stream.name == stream_name).get()
         if not stream:
             return None
@@ -85,7 +85,7 @@ class Stream(ndb.Model):
 
         cover_url = stream.cover_url
         if not cover_url:
-            cover_url = DEFAULT_STREAM_COVER_URL
+            cover_url = host_url + DEFAULT_STREAM_COVER_URL
 
         stream.put()
 
@@ -130,7 +130,7 @@ class Stream(ndb.Model):
         return streams
 
     @classmethod
-    def all_streams_matching(cls, query):
+    def all_streams_matching(cls, query, host_url=''):
         streams = []
         if query:
             streams = cls.get_streams_matching_string(query)
@@ -140,7 +140,7 @@ class Stream(ndb.Model):
         for s in streams:
             cover_url=s.cover_url
             if not cover_url:
-                cover_url = DEFAULT_STREAM_COVER_URL
+                cover_url = host_url + DEFAULT_STREAM_COVER_URL
             result.append({'name': s.name, 'cover_url': cover_url})
         return result
 

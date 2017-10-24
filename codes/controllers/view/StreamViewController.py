@@ -78,7 +78,6 @@ class StreamViewController(webapp2.RequestHandler):
 
     def update_trending_preferences(self):
         duration = int(self.request.get('interval', 60*60))
-        from_view = True
         if gusers.get_current_user():
             User.update_trending_preferences(gusers.get_current_user().email(), duration)
             self.redirect(StreamViewController.trendings_show_route)

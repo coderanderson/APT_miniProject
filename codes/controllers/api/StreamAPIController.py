@@ -16,7 +16,7 @@ from codes.controllers.view.UserViewController import UserViewController
 
 class StreamAPIController(webapp2.RequestHandler):
 
-    def create(self, from_view=False):
+    def create(self):
         self.response.headers['Content-Type'] = 'application/json'
         if gusers.get_current_user():
             stream_name = self.request.get('stream_name', DEFAULT_STREAM_NAME)
@@ -48,7 +48,7 @@ class StreamAPIController(webapp2.RequestHandler):
         per_page = int(self.request.get('per_page', 10))
         All = int(self.request.get('All', '0'))
 
-        result = Stream.view(stream_name, page, per_page, All==1)
+        result = Stream.view(stream_name, page, per_page, All==1, host_url = self.request.host_url)
         if result:
             self.response.set_status(200)
             self.response.out.write(json.dumps(result,\
@@ -59,7 +59,7 @@ class StreamAPIController(webapp2.RequestHandler):
     def all_streams_matching(self):
         self.response.headers['Content-Type'] = 'application/json'
         query = self.request.get('query', '')
-        result = Stream.all_streams_matching(query)
+        result = Stream.all_streams_matching(query, host_url = self.request.host_url)
         self.response.out.write(json.dumps(result))
         if len(result) is 0:
             self.response.set_status(204)
