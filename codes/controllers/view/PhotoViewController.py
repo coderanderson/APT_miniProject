@@ -32,7 +32,10 @@ class PhotoUploadHandler(blobstore_handlers.BlobstoreUploadHandler):
     def post(self):
 
         stream_name = self.request.get('stream_name', DEFAULT_STREAM_NAME)
-        result = Photo.store(stream_name, self.get_uploads())
+        lat = float(self.request.get('lat', 0))
+        lon = float(self.request.get('lon', 0))
+        #lat, lon = 0,0
+        result = Photo.store(stream_name, self.get_uploads(), lat, lon)
 
         PhotoUploadHandler.upload_url = blobstore.create_upload_url(PhotoUploadHandler.upload_raw_url)
         self.response.headers['Content-Type'] = 'application/json'

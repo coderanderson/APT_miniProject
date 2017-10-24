@@ -1,4 +1,6 @@
 from google.appengine.ext import ndb
+from google.appengine.api import search
+
 import datetime
 import time
 import math
@@ -6,7 +8,6 @@ import operator
 
 import codes
 
-from google.appengine.api import search
 
 DEFAULT_STREAM_NAME = 'default_stream'
 DEFAULT_STREAM_COVER_URL = '/static_files/img/no_cover.png'

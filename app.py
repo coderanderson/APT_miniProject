@@ -39,6 +39,9 @@ app = webapp2.WSGIApplication([
 
     webapp2.Route('/api/upload_photo', PhotoAPIController, handler_method='create',\
         methods=['POST']),
+    webapp2.Route(PhotoAPIController.location_search_api_url,\
+        PhotoAPIController, handler_method='nearby_photo_search',\
+        methods=['POST']),
 
     webapp2.Route(StreamViewController.manage_route, StreamViewController, handler_method='show_manage_menu',\
         methods=['GET']),

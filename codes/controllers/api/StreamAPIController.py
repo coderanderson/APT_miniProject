@@ -46,8 +46,9 @@ class StreamAPIController(webapp2.RequestHandler):
         stream_name = self.request.get('stream_name', DEFAULT_STREAM_NAME)
         page = int(self.request.get('page', 1))
         per_page = int(self.request.get('per_page', 10))
+        All = int(self.request.get('All', '0'))
 
-        result = Stream.view(stream_name, page, per_page)
+        result = Stream.view(stream_name, page, per_page, All==1)
         if result:
             self.response.set_status(200)
             self.response.out.write(json.dumps(result,\
