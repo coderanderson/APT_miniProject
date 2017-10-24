@@ -1,4 +1,5 @@
 from google.appengine.ext import ndb
+from google.appengine.ext import blobstore
 import codes
 
 
@@ -16,3 +17,8 @@ class Photo(ndb.Model):
         photo.blob_key = (uploads[0]).key()
         photo.put()
         return {}
+
+    @classmethod
+    def _pre_delete_hook(cls, key):
+        p = key.get()
+        blobstore.delete(p.blob_key)

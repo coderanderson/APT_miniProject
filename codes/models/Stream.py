@@ -185,19 +185,28 @@ class Stream(ndb.Model):
             ts.put()
 
     @classmethod
+    def remove_stream_by_name(cls, stream_name, owner_email):
+        stream = Stream.query().filter(Stream.name == stream_name).get()
+        if not stream:
+            return False
+        if not((not owner_email) or (stream.owner.get().email == owner_email)):
+            return False
+
+        ndb.delete_multi(stream.photos.fetch(keys_only=True))
+        ndb.delete_multi(stream.view_records.fetch(keys_only=True))
+
+        key = stream.key
+        for u in stream.members.fetch():
+            u.subscription_list.remove(key)
+            u.put()
+        key.delete()
+        cls.remove_stream_from_index(stream)
+        return True
+
+    @classmethod
     def bulk_remove_unsubscribe(cls, remove_list, unsubscribe_list, user_email):
         for rname in remove_list:
-            stream = Stream.query().filter(Stream.name == rname).get()
-            if not stream:
-                continue
-            key = stream.key
-            # TODO: remove all images not only subscribers
-            if stream.owner.get().email == user_email:
-                for u in stream.members.fetch():
-                    u.subscription_list.remove(key)
-                    u.put()
-                key.delete()
-            cls.remove_stream_from_index(stream)
+            cls.remove_stream_by_name(rname, user_email)
         user = codes.models.User.query().filter(codes.models.User.email == user_email).get()
         for unname in unsubscribe_list:
             stream = Stream.query().filter(Stream.name == unname).get()
