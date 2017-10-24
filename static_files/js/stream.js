@@ -11,8 +11,8 @@ var photo_objs = new Array();
 for(var i = 0; i < photos.length; i++) {
   var newObj = {
     url: photos[i],
-    x: parseFloat(locations[i].lat),
-    y: parseFloat(locations[i].lon),
+    x: parseFloat(locations[i].lat) + Math.random()*0.0001,
+    y: parseFloat(locations[i].lon) + Math.random()*0.0001,
     date: dates[i]
   };
   photo_objs.push(newObj);
