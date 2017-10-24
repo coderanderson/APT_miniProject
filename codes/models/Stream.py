@@ -78,6 +78,7 @@ class Stream(ndb.Model):
             photos = stream.photos.order(-codes.models.Photo.creation_date).fetch(per_page, offset=per_page * (page - 1))
         photo_urls = [codes.controllers.view.PhotoViewController.PhotoViewController.generate_url_of_photo(p) for p in photos]
         photo_dates = [p.creation_date for p in photos]
+        photo_locations = [{'lat': p.location.lat, 'lon': p.location.lon} for p in photos]
 
         vr = codes.models.ViewRecord(stream = stream.key)
         vr.put()
@@ -94,7 +95,9 @@ class Stream(ndb.Model):
                 'page': page,\
                 'per_page': per_page,\
                 'photo_dates': photo_dates,\
-                'photo_urls': photo_urls}
+                'photo_urls': photo_urls,\
+                'photo_locations': photo_locations
+                }
         return result
 
     @classmethod

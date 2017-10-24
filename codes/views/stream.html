@@ -38,6 +38,10 @@
             {% for photo_url in photo_urls %}
                photos.push("{{ photo_url|safe }}");
             {% endfor %}
+            var locations = new Array();
+            {% for l in photo_locations %}
+                locations.push({lat: {{ l['lat'] }}, lon: {{ l['lon'] }}});
+            {% endfor %}
             var dates = new Array();
             {% for photo_date in photo_dates %}
                dates.push("{{ photo_date }}");

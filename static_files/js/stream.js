@@ -11,8 +11,8 @@ var photo_objs = new Array();
 for(var i = 0; i < photos.length; i++) {
   var newObj = {
     url: photos[i],
-    x: Math.random() * 75,
-    y: Math.random() * 75,
+    x: parseFloat(locations[i].lat),
+    y: parseFloat(locations[i].lon),
     date: dates[i]
   };
   photo_objs.push(newObj);
@@ -55,6 +55,12 @@ function refresh() {
     google.maps.event.addListener(marker, 'mouseout', (function(marker,content){ 
         return function() {
            marker.setIcon('http://www.christielakekids.com/_images/new/blue_circle.png');
+        };
+    })(marker,content)); 
+
+    google.maps.event.addListener(marker, 'click', (function(marker,content){ 
+        return function() {
+            window.location.href = content;
         };
     })(marker,content)); 
   }

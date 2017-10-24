@@ -48,6 +48,7 @@ class StreamViewController(webapp2.RequestHandler):
         page = int(self.request.get('page', 1))
         per_page = int(self.request.get('per_page', 10))
         All = int(self.request.get('All', '0'))
+        Geo = int(self.request.get('Geo', '0'))
 
         result = Stream.view(stream_name, page, per_page, All==1)
         if not result:
@@ -59,6 +60,7 @@ class StreamViewController(webapp2.RequestHandler):
         else:
             result.update({'invite_route':StreamViewController.invite_route,'view_route':StreamViewController.view_route })
             result['All'] = All
+            result['Geo'] = Geo
             result.update(UserViewController.get_login_info(self))
             result['photo_upload_url'] = PhotoUploadHandler.upload_url
             template = StreamViewController.JINJA_ENVIRONMENT.get_template('stream.html')
