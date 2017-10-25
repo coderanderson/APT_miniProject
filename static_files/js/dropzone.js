@@ -491,7 +491,9 @@ var Dropzone = function (_Emitter) {
                   this.options.url = response.new_url;
               });
               this.on('queuecomplete', function(file, response) {
-                  setTimeout(function() { location.reload(); }, 1000);
+                  setTimeout(function() {
+                      location.reload();
+                  }, 1000);
               });
           },
 

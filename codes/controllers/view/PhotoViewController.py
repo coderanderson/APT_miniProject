@@ -44,6 +44,7 @@ class PhotoUploadHandler(blobstore_handlers.BlobstoreUploadHandler):
             self.response.set_status(404)
             self.response.out.write(json.dumps({'error': result['error']}))
         else:
-            self.response.out.write(json.dumps({'description': 'send the request to the new_url',\
-                'new_url': PhotoUploadHandler.upload_url}))
+            response = json.dumps({'description': 'send the request to the new_url',\
+                'new_url': PhotoUploadHandler.upload_url})
+            self.response.out.write(response)
 

@@ -5,8 +5,9 @@ import codes
 from codes.controllers.view.UserViewController import UserViewController
 from codes.controllers.view.PhotoViewController import PhotoUploadHandler
 from codes.models import *
-from google.appengine.api import users as gusers
 
+from google.appengine.api import users as gusers
+from google.appengine.ext import blobstore
 
 class StreamViewController(webapp2.RequestHandler):
     def create(self):
@@ -62,7 +63,7 @@ class StreamViewController(webapp2.RequestHandler):
             result['All'] = All
             result['Geo'] = Geo
             result.update(UserViewController.get_login_info(self))
-            result['photo_upload_url'] = PhotoUploadHandler.upload_url
+            result['photo_upload_url'] = blobstore.create_upload_url(PhotoUploadHandler.upload_raw_url)
             template = StreamViewController.JINJA_ENVIRONMENT.get_template('stream.html')
             self.response.write(template.render(result))
         
